@@ -19,7 +19,9 @@
     "lodash": "~2.4.1",
     "js-quantities": "~1.4.1",
     "moment": "~2.7.0",
-    "angular-google-maps": "~1.1.4"
+    "angular-google-maps": "~1.1.4",
+    "highcharts-ng": "~0.0.6",
+    "highcharts": "~3.0.7"
   },
   "overrides": {
     "bootstrap": {

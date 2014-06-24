@@ -6,7 +6,7 @@ Navigation planner for the [SolarSurfer](http://bluerobotics.com/) project.
 
 This script is used to estimate the total travel profile of the SolarSurfer. While written in JavaScript, this package isn't normally hosted anywhere, so you'll have to download and run it yourself to see it.
 
-The bulk of the planning calculations take place in `app/scripts/SolarSurferPlanner.js`. This file uses these packages:
+The bulk of the planning calculations takes place in `app/scripts/SolarSurferPlanner.js`. The planner uses these packages:
 
 * [moment.js](http://momentjs.com/) for working with date and time objects
 * [js-quantities](http://gentooboontoo.github.io/js-quantities/) for dealing with units

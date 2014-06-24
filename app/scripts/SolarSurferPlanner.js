@@ -88,11 +88,21 @@ Planner.prototype.calculateStep = function(previous) {
 
 // calculate available solar energy based on time of day and day of year
 Planner.prototype.calculateSolar = function(data, previous) {
+    // calculate the power output
+    // TODO: actually use sun angle at the time of the year
+    if(data.date.hours() > 7 && data.date.hours() < 20) {
+        // let's call this night
+        data.v_solar = new Qty('0 V');
+    }
+    else {
+        // let's call this day and pretend we get full power
+        data.v_solar = new Qty('14 V');
+    }
 };
 
 // calculate battery state based on previous state and solar state
 Planner.prototype.calculateBattery = function(data, previous) {
-    data.v_batt = 0;
+    data.v_batt = data.v_solar;
 };
 
 // calculate the sea conditions based on historical record
@@ -117,11 +127,9 @@ Planner.prototype.calculateMovement = function(data, previous) {
     // force balance
     // var f = data.thrust - data.drag;
 
-    // simple speed calc for now
+    // simple speed calc if battery power is good
     var v;
-    if(data.date.hours() > 12) {
-        // let's call this night for now
-
+    if(data.v_batt.gt(new Qty('10 V'))) {
         // stormy seas?
         if(Math.random() > 0.9) {
             v = {
@@ -136,7 +144,7 @@ Planner.prototype.calculateMovement = function(data, previous) {
         v = {
             mag: new Qty('4.5 ft/s'), // this is the fastest we could go
             dir: new Qty(google.maps.geometry.spherical.computeHeading(
-                this.options.loc_start,
+                previous.loc,
                 this.options.loc_end
             )+'deg')
         };
@@ -155,7 +163,10 @@ Planner.prototype.calculateMovement = function(data, previous) {
         x.mag.scalar,
         x.dir.scalar
     );
-
+    data.dx_home = new Qty(google.maps.geometry.spherical.computeDistanceBetween(
+        this.options.loc_start,
+        data.loc
+    )+'m'); // probably in meters, API docs don't say
 };
 
 // export

@@ -8,6 +8,7 @@ var app = angular.module('app', [
     'ngRoute',
     // third-party modules
     'google-maps',
+    'highcharts-ng',
     // app modules
     'app.filters',
     'app.services',

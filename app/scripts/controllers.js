@@ -44,6 +44,78 @@ controllers.controller('HomeCtrl', ['$scope', '$rootScope',
             });
         });
 
+        // build charts series
+        var dx_series = {
+            name: 'Distance from Manhattan Beach (km)',
+            marker: {
+                enabled: false
+            },
+            data: []
+        };
+        angular.forEach(planner.data, function(step){
+            dx_series.data.push([
+                step.date.toDate(),
+                step.dx_home.to('km').scalar
+            ]);
+        });
+        var vbatt_series = {
+            name: 'Battery Voltage (V)',
+            yAxis: 1,
+            marker: {
+                enabled: false
+            },
+            data: []
+        };
+        angular.forEach(planner.data, function(step){
+            vbatt_series.data.push([
+                step.date.toDate(),
+                step.v_batt.to('V').scalar
+            ]);
+        });
+
+        // construct a chart from the sim
+        $scope.chart = {
+            options: {
+                chart: {
+                    type: 'line',
+                    zoomType: 'x'
+                }
+            },
+            xAxis: {
+                type: 'datetime',
+                dateTimeLabelFormats: { // don't display the dummy year
+                    month: '%e. %b',
+                    year: '%b'
+                },
+                title: {
+                    text: 'Date'
+                }
+            },
+            yAxis: [{ // Primary yAxis
+                gridLineWidth: 0,
+                title: {
+                    text: 'Distance (km)',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                }
+            }, { // Secondary yAxis
+                gridLineWidth: 0,
+                title: {
+                    text: 'Voltage (V)',
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                },
+                opposite: true
+            }],
+            series: [dx_series, vbatt_series],
+            title: {
+                text: ''
+            },
+            loading: false
+        };
+
         // console debug
         window.planner = planner;
         window.scope = $scope;

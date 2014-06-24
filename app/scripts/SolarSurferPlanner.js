@@ -13,8 +13,10 @@ function Planner(options) {
 Planner.prototype.default_options = {
     debug: true,
     date_start: moment(),
-    date_delta: moment.duration(1, 'minute'),
-    date_max: moment().add(moment.duration(2, 'hours'))
+    date_delta: moment.duration(1, 'hour'),
+    date_max: moment().add(moment.duration(10, 'weeks')),
+    loc_start: new google.maps.LatLng(33.8823163, -118.4123013),
+    loc_end: new google.maps.LatLng(19.1205301, -155.5010251)
 };
 
 // this is used as the data template during each step
@@ -32,7 +34,9 @@ Planner.prototype.log = function(data) {
 };
 
 // console logger
-Planner.prototype.logger = console.log;
+Planner.prototype.logger = function(data) {
+    console.log(data);
+};
 
 // chainable constructor
 Planner.prototype.start = function() {
@@ -42,7 +46,8 @@ Planner.prototype.start = function() {
     // state vars
     var step, previous = {
         step: 0,
-        date: this.options.date_start.clone()
+        date: this.options.date_start.clone(),
+        loc: this.options.loc_start
     };
 
     // loop
@@ -93,6 +98,10 @@ Planner.prototype.calculateBattery = function(data, previous) {
 // calculate the sea conditions based on historical record
 Planner.prototype.calculateSea = function(data, previous) {
     // calculate a historic or random sea current from the JPL OSCAR database
+    data.sea_current = {
+        mag: new Qty('0.1 m/s'),
+        dir: new Qty('-180 deg') // to the South
+    };
 };
 
 // calculate drag based on sea state
@@ -109,7 +118,43 @@ Planner.prototype.calculateMovement = function(data, previous) {
     // var f = data.thrust - data.drag;
 
     // simple speed calc for now
-    var v = new Qty('4.5 ft/s'); // this is the fasted we could go
+    var v;
+    if(data.date.hours() > 12) {
+        // let's call this night for now
+
+        // stormy seas?
+        if(Math.random() > 0.9) {
+            v = {
+                mag: data.sea_current.mag.mul(10),
+                dir: data.sea_current.dir
+            };
+        }
+        else v = data.sea_current;
+    }
+    else {
+        // let's call this day and pretend we get full power
+        v = {
+            mag: new Qty('4.5 ft/s'), // this is the fastest we could go
+            dir: new Qty(google.maps.geometry.spherical.computeHeading(
+                this.options.loc_start,
+                this.options.loc_end
+            )+'deg')
+        };
+    }
+
+    // calculate a distance from the speed
+    var dt = new Qty(this.options.date_delta.asMilliseconds()+'ms');
+    var x = {
+        mag: v.mag.mul(dt).to('m'),
+        dir: v.dir
+    };
+
+    // calculate new latlng based on the distance and heading
+    data.loc = google.maps.geometry.spherical.computeOffset(
+        previous.loc,
+        x.mag.scalar,
+        x.dir.scalar
+    );
 
 };
 

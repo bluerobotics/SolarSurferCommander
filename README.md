@@ -10,6 +10,7 @@ The bulk of the planning calculations take place in `app/scripts/SolarSurferPlan
 
 * [moment.js](http://momentjs.com/) for working with date and time objects
 * [js-quantities](http://gentooboontoo.github.io/js-quantities/) for dealing with units
+* [Google Maps Geometry Library](https://developers.google.com/maps/documentation/javascript/reference#spherical) for converting between distances and lat, long
 * [Lo-Dash](http://lodash.com/) for handy utility functions
 
 ## Usage

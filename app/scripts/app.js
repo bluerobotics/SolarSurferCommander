@@ -2,9 +2,13 @@
 
 'use strict';
 
-// Declare app level module which depends on filters, and services
+// declare app level module
 var app = angular.module('app', [
+    // angular modules
     'ngRoute',
+    // third-party modules
+    'google-maps',
+    // app modules
     'app.filters',
     'app.services',
     'app.directives',

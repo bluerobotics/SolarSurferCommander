@@ -2,6 +2,10 @@
     <header class="page-mast">
         <h2 class="page-title">Planner</h2>
     </header>
+    <google-map center="map.center" zoom="map.zoom">
+        <polyline path="ideal_path.path"></polyline>
+        <polyline path="sim_path.path" stroke="sim_path.stroke"></polyline>
+    </google-map>
     <div class="well">
         <ul>
             <li ng-repeat="data in log">{{data}}</li>

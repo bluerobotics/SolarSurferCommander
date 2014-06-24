@@ -19,7 +19,8 @@ The bulk of the planning calculations takes place in `app/scripts/SolarSurferPla
 Clone the repo, install the code, and start the server like this:
 
 ```bash
-git clone https://github.com/bluerobotics/SolarSurferAPI.git
+git clone https://github.com/bluerobotics/SolarSurferPlanner.git
+cd SolarSurferPlanner
 npm install
 npm start
 ```

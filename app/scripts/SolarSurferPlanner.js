@@ -90,14 +90,12 @@ Planner.prototype.calculateStep = function(previous) {
 Planner.prototype.calculateSolar = function(data, previous) {
     // calculate the power output
     // TODO: actually use sun angle at the time of the year
-    if(data.date.hours() > 7 && data.date.hours() < 20) {
-        // let's call this night
-        data.v_solar = new Qty('0 V');
+    var sun_factor = (Math.sin((5/6)*(data.date.hours()-7)/Math.PI)*0.9+0.1);
+    if ( sun_factor < 0 ) {
+    	sun_factor = 0;
     }
-    else {
-        // let's call this day and pretend we get full power
-        data.v_solar = new Qty('14 V');
-    }
+    data.p_solar = new Qty(sun_factor*120+'W');
+    data.v_solar = new Qty(sun_factor*14+'V'); // This is not accurate at all.
 };
 
 // calculate battery state based on previous state and solar state
@@ -129,7 +127,7 @@ Planner.prototype.calculateMovement = function(data, previous) {
 
     // simple speed calc if battery power is good
     var v;
-    if(data.v_batt.gt(new Qty('10 V'))) {
+    if(data.p_solar.lt(new Qty('20 W'))) {
         // stormy seas?
         if(Math.random() > 0.9) {
             v = {
@@ -140,12 +138,14 @@ Planner.prototype.calculateMovement = function(data, previous) {
         else v = data.sea_current;
     }
     else {
-        // let's call this day and pretend we get full power
+        // For now we'll assume that 4.5 ft/s is our max speed at max power and the speed
+        // drops off linearly with power. This isn't really true because drag is proportional
+        // to the square of speed and thrust. It'll be close though.
         v = {
-            mag: new Qty('4.5 ft/s'), // this is the fastest we could go
+            mag: data.p_solar.div(new Qty('120.0 W')).mul(new Qty('4.5 ft/s')), // this is the fastest we could go
             dir: new Qty(google.maps.geometry.spherical.computeHeading(
                 previous.loc,
-                this.options.loc_end
+                this.options.loc_end 
             )+'deg')
         };
     }

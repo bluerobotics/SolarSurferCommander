@@ -58,8 +58,8 @@ controllers.controller('HomeCtrl', ['$scope', '$rootScope',
                 step.dx_home.to('km').scalar
             ]);
         });
-        var vbatt_series = {
-            name: 'Battery Voltage (V)',
+        var psolar_series = {
+            name: 'Solar Power (W)',
             yAxis: 1,
             marker: {
                 enabled: false
@@ -67,9 +67,9 @@ controllers.controller('HomeCtrl', ['$scope', '$rootScope',
             data: []
         };
         angular.forEach(planner.data, function(step){
-            vbatt_series.data.push([
+            psolar_series.data.push([
                 step.date.toDate(),
-                step.v_batt.to('V').scalar
+                step.p_solar.to('W').scalar
             ]);
         });
 
@@ -102,14 +102,14 @@ controllers.controller('HomeCtrl', ['$scope', '$rootScope',
             }, { // Secondary yAxis
                 gridLineWidth: 0,
                 title: {
-                    text: 'Voltage (V)',
+                    text: 'Solar Power (W)',
                     style: {
                         color: Highcharts.getOptions().colors[1]
                     }
                 },
                 opposite: true
             }],
-            series: [dx_series, vbatt_series],
+            series: [dx_series, psolar_series],
             title: {
                 text: ''
             },

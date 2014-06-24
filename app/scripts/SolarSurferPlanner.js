@@ -118,6 +118,7 @@ Planner.prototype.calculateDrag = function(data, previous) {
 
 // calculate thrust based on available battery power
 Planner.prototype.calculateThrust = function(data, previous) {
+	data.thrust = data.p_solar.div(new Qty('120.0 W')).mul(new Qty('26.7 N')); // Each thruster produces 3 lb at ~60 Watts
 };
 
 // calculate new position at the end of the step

@@ -108,7 +108,7 @@ Planner.prototype.calculateSea = function(data, previous) {
     // calculate a historic or random sea current from the JPL OSCAR database
     data.sea_current = {
         mag: new Qty('0.1 m/s'),
-        dir: new Qty('-180 deg') // to the South
+        dir: new Qty('-130 deg') // to the South
     };
 };
 
@@ -142,7 +142,7 @@ Planner.prototype.calculateMovement = function(data, previous) {
         // drops off linearly with power. This isn't really true because drag is proportional
         // to the square of speed and thrust. It'll be close though.
         v = {
-            mag: data.p_solar.div(new Qty('120.0 W')).mul(new Qty('4.5 ft/s')), // this is the fastest we could go
+            mag: data.p_solar.div(new Qty('120.0 W')).mul(new Qty('4.5 ft/s')),
             dir: new Qty(google.maps.geometry.spherical.computeHeading(
                 previous.loc,
                 this.options.loc_end 

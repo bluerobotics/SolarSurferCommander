@@ -14,9 +14,10 @@ Planner.prototype.default_options = {
     debug: true,
     date_start: moment(),
     date_delta: moment.duration(1, 'hour'),
-    date_max: moment().add(moment.duration(10, 'weeks')),
+    date_max: moment().add(moment.duration(6, 'months')),
     loc_start: new google.maps.LatLng(33.8823163, -118.4123013),
-    loc_end: new google.maps.LatLng(19.1205301, -155.5010251)
+    loc_end: new google.maps.LatLng(19.1205301, -155.5010251),
+    nav_radius: new Qty('1 km')
 };
 
 // this is used as the data template during each step
@@ -44,21 +45,31 @@ Planner.prototype.start = function() {
     this.data = [];
 
     // state vars
+    this.dt = new Qty(this.options.date_delta.asMilliseconds()+'ms');
     var step, previous = {
         step: 0,
         date: this.options.date_start.clone(),
-        loc: this.options.loc_start
+        loc: this.options.loc_start,
+        energy: new Qty('0 J')
     };
 
     // loop
     this.log('### Starting the sim...');
-    while(previous === undefined || previous.date < this.options.date_max) {
+    var at_end = false;
+    while(!at_end && previous.date < this.options.date_max) {
         // calculate step
         step = this.calculateStep(previous);
 
         // save data
         this.data.push(step);
         previous = step;
+
+        // see if we reach the end
+        var err_end = new Qty(google.maps.geometry.spherical.computeDistanceBetween(
+            this.options.loc_end,
+            step.loc
+        )+'m');
+        at_end = err_end.lt(this.options.nav_radius);
     }
     this.log('### Sim complete!');
 };
@@ -76,11 +87,12 @@ Planner.prototype.calculateStep = function(previous) {
 
     // do the actual sim logic
     this.calculateSolar(data, previous);
-    this.calculateBattery(data, previous);
+    this.calculatePowerAvailable(data, previous);
     this.calculateSea(data, previous);
     this.calculateDrag(data, previous);
     this.calculateThrust(data, previous);
     this.calculateMovement(data, previous);
+    this.calculatePowerUsed(data, previous);
 
     // return the result of this step
     return data;
@@ -99,7 +111,7 @@ Planner.prototype.calculateSolar = function(data, previous) {
 };
 
 // calculate battery state based on previous state and solar state
-Planner.prototype.calculateBattery = function(data, previous) {
+Planner.prototype.calculatePowerAvailable = function(data, previous) {
     data.v_batt = data.v_solar;
 };
 
@@ -152,22 +164,26 @@ Planner.prototype.calculateMovement = function(data, previous) {
     }
 
     // calculate a distance from the speed
-    var dt = new Qty(this.options.date_delta.asMilliseconds()+'ms');
     var x = {
-        mag: v.mag.mul(dt).to('m'),
+        mag: v.mag.mul(this.dt).to('m'),
         dir: v.dir
     };
 
     // calculate new latlng based on the distance and heading
     data.loc = google.maps.geometry.spherical.computeOffset(
         previous.loc,
-        x.mag.scalar,
-        x.dir.scalar
+        x.mag.to('m').scalar,
+        x.dir.to('deg').scalar
     );
     data.dx_home = new Qty(google.maps.geometry.spherical.computeDistanceBetween(
         this.options.loc_start,
         data.loc
     )+'m'); // probably in meters, API docs don't say
+};
+
+// calculate power used
+Planner.prototype.calculatePowerUsed = function(data, previous) {
+    data.energy = previous.energy.add(data.p_solar.mul(this.dt));
 };
 
 // export

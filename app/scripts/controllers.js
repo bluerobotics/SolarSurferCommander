@@ -116,6 +116,12 @@ controllers.controller('HomeCtrl', ['$scope', '$rootScope',
             loading: false
         };
 
+        // stats window
+        var last_step = planner.data[planner.data.length-1];
+        $scope.elapsed = last_step.date.diff(
+            planner.options.date_start, 'weeks') + ' weeks';
+        $scope.energy = last_step.energy.toString();
+
         // console debug
         window.planner = planner;
         window.scope = $scope;

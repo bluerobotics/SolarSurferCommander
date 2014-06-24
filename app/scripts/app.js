@@ -8,8 +8,7 @@ var app = angular.module('app', [
     'app.filters',
     'app.services',
     'app.directives',
-    'app.controllers',
-    'angularMoment'
+    'app.controllers'
 ]);
 
 app.value('version', '0.1.0');
@@ -22,6 +21,11 @@ app.config(['$routeProvider', '$httpProvider', '$locationProvider',
     // routes
     $routeProvider.when('/home', {
         templateUrl: 'templates/home.html',
+        controller: 'HomeCtrl',
+        reloadOnSearch: false
+    });
+    $routeProvider.when('/help', {
+        templateUrl: 'templates/help.html',
         controller: 'StaticCtrl',
         reloadOnSearch: false
     });

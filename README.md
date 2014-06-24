@@ -34,3 +34,6 @@ This project uses [semantic versioning](http://semver.org/).
 
 * Initial release
 
+## Screenshot
+
+![Screenshot](screenshot.png)

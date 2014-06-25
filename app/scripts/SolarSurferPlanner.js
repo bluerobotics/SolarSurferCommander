@@ -58,7 +58,7 @@ Planner.prototype.start = function() {
     };
 
     // loop
-    this.log('### Starting the sim...');
+    this.log('Starting sim...');
     var at_end = false;
     while(!at_end && previous.date < this.config.date_max) {
         // calculate step
@@ -75,14 +75,13 @@ Planner.prototype.start = function() {
         )+'m');
         at_end = err_end.lt(this.config.nav_radius);
     }
-    this.log('### Sim complete!');
+    this.log('Sim complete! '+String(this.data.length)+' steps');
     this.complete = true;
     if(this.callback !== undefined) this.callback(this);
 };
 
 // allow another class to inherit from Planner
 Planner.prototype.calculateStep = function(previous) {
-    this.log('step');
 
     // create a new step container
     var data = _.clone(this.data_template);

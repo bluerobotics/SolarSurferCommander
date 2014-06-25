@@ -178,7 +178,7 @@ directives.directive('result', [
                     // stats window
                     var last_step = planner.data[planner.data.length-1];
                     $scope.elapsed = last_step.date.diff(
-                        planner.config.date_start, 'weeks') + ' weeks';
+                        planner.config.date_start, 'days') + ' days';
                     $scope.energy = last_step.energy.toString();
 
                     // let the template know we are done

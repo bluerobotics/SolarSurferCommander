@@ -24,9 +24,7 @@ directives.directive('resultSet', ['$timeout',
             controller: function($scope, $element) {
             },
             link: function(scope, element, attrs) {
-                console.log('linking result-set', scope.configs)
                 scope.completed = 0;
-                scope.progress = 0;
 
                 // run all of the sims
                 var startNextPlanner = function() {
@@ -34,10 +32,8 @@ directives.directive('resultSet', ['$timeout',
                         $timeout(function(){
                             scope.configs[scope.completed].planner.start();
                             scope.completed = scope.completed + 1;
-                            scope.progress = scope.completed * 100 / scope.configs.length;
-                            console.log('progress', scope.progress)
                             startNextPlanner();
-                        }, 1000);
+                        }, 0);
                     }
                 };
                 startNextPlanner();
@@ -68,7 +64,15 @@ directives.directive('result', [
                             latitude: 26.0925675,
                             longitude: -138.2964353
                         },
-                        zoom: 4
+                        zoom: 4,
+                        options: {
+                            panControl: false,
+                            zoomControl: true,
+                            mapTypeControl: true,
+                            scaleControl: false,
+                            streetViewControl: false,
+                            overviewMapControl: false
+                        }
                     };
 
                     // construct the ideal path
@@ -79,14 +83,17 @@ directives.directive('result', [
                         }, {
                             latitude: planner.config.loc_end.lat(),
                             longitude: planner.config.loc_end.lng()
-                        }]
+                        }],
+                        // stroke: {
+                        //     color: '#2C99CE'
+                        // }
                     };
 
                     // construct a path from the sim
                     $scope.sim_path = {
                         path: [],
                         stroke: {
-                            color: "#FF0000"
+                            color: '#FF0000'
                         }
                     };
                     angular.forEach(planner.data, function(step){
@@ -176,16 +183,12 @@ directives.directive('result', [
 
                     // let the template know we are done
                     $scope.complete = true;
-                    console.log('processResult complete')
                 };
 
                 // setup local scope and callback
                 scope.complete = false;
                 scope.showBody = attrs.showBody=='true' ? true : false;
                 scope.planner.callback = processResult;
-
-                console.log('linking result', scope);
-                window.rscope = scope;
             },
             templateUrl: 'templates/result.html',
             replace: true

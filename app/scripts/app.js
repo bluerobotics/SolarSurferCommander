@@ -30,9 +30,9 @@ app.config(['$routeProvider', '$httpProvider', '$locationProvider',
         controller: 'HomeCtrl',
         reloadOnSearch: false
     });
-    $routeProvider.when('/trade/timeofyear', {
+    $routeProvider.when('/trade/throttlesetting', {
         templateUrl: 'templates/trade.html',
-        controller: 'TradeCtrl',
+        controller: 'ThrottleSettingTradeCtrl',
         reloadOnSearch: false
     });
     $routeProvider.when('/trade/seastate', {

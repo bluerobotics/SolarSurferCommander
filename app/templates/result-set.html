@@ -1,5 +1,5 @@
 <div>
-    <progressbar class="progress" ng-class="{'progress-striped active': progress < 100}" value="progress" type="success">
+    <progressbar class="progress" ng-class="{'progress-striped active': completed < configs.length}" value="completed" type="success" max="configs.length" animate="false">
         {{completed}} / {{configs.length}}
     </progressbar>
 

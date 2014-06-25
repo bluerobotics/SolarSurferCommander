@@ -18,7 +18,8 @@ Planner.prototype.default_config = {
     loc_start: new google.maps.LatLng(33.8823163, -118.4123013),
     loc_end: new google.maps.LatLng(19.1205301, -155.5010251),
     nav_radius: new Qty('1 km'),
-    p_thruster: new Qty('60 W')
+    p_thruster: new Qty('60 W'),
+    sea_mult: new Qty('1')
 };
 
 // this is used as the data template during each step
@@ -125,7 +126,7 @@ Planner.prototype.calculatePowerAvailable = function(data, previous) {
 Planner.prototype.calculateSea = function(data, previous) {
     // calculate a historic or random sea current from the JPL OSCAR database
     data.sea_current = {
-        mag: new Qty('0.1 m/s'),
+        mag: new Qty('0.1 m/s').mul(this.config.sea_mult.scalar),
         dir: new Qty('-180 deg') // to the South
     };
 };

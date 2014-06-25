@@ -19,40 +19,35 @@ controllers.controller('HomeCtrl', ['$scope', '$rootScope', '$timeout',
         window.scope = $scope;
     }]);
 
-controllers.controller('TradeCtrl', ['$scope', '$rootScope', '$timeout',
-    function ($scope, $rootScope, $timeout) {
+controllers.controller('ThrottleSettingTradeCtrl', ['$scope',
+    function ($scope) {
         // define the scenarios to run
-        $scope.configs = [{
-            title: 'each thruster as 20W',
-            planner: new Planner({
-                p_thruster: new Qty('20 W')
-            })
-        },{
-            title: 'each thruster as 40W',
-            planner: new Planner({
-                p_thruster: new Qty('40 W')
-            })
-        },{
-            title: 'each thruster as 60W',
-            planner: new Planner({
-                p_thruster: new Qty('60 W')
-            })
-        },{
-            title: 'each thruster as 80W',
-            planner: new Planner({
-                p_thruster: new Qty('80 W')
-            })
-        },{
-            title: 'each thruster as 100W',
-            planner: new Planner({
-                p_thruster: new Qty('80 W')
-            })
-        },{
-            title: 'each thruster as 120W',
-            planner: new Planner({
-                p_thruster: new Qty('80 W')
-            })
-        }];
+        $scope.configs = [];
+        for(var i = 20; i <= 120; i = i + 20) {
+            $scope.configs.push({
+                title: 'each thruster set to ' + i + 'W',
+                planner: new Planner({
+                    p_thruster: new Qty(i+'W')
+                })
+            });
+        }
+
+        // console debug
+        window.scope = $scope;
+    }]);
+
+controllers.controller('SeaStateTradeCtrl', ['$scope',
+    function ($scope) {
+        // define the scenarios to run
+        $scope.configs = [];
+        for(var i = 0; i <= 5; i++) {
+            $scope.configs.push({
+                title: 'OSCAR currents * ' + i,
+                planner: new Planner({
+                    sea_mult: new Qty(String(i))
+                })
+            });
+        }
 
         // console debug
         window.scope = $scope;

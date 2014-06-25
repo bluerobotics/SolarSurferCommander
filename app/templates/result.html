@@ -9,19 +9,25 @@
             This scenario has not been processed yet.
         </div>
 
-        <div ng-if="complete">
-            <google-map center="map.center" zoom="map.zoom">
-                <polyline path="ideal_path.path"></polyline>
-                <polyline path="sim_path.path" stroke="sim_path.stroke"></polyline>
-            </google-map>
+        <div ng-if="complete" class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <google-map center="map.center" zoom="map.zoom" options="map.options" draggable="true">
+                        <polyline path="ideal_path.path"></polyline>
+                        <polyline path="sim_path.path" stroke="sim_path.stroke"></polyline>
+                    </google-map>
+                </div>
+                <div class="col-md-6">
+                    <div class="well">
+                        <p>Elapsed time: {{elapsed}}</p>
+                        <p>Energy used: {{energy}}</p>
+                    </div>
+                </div>
+            </div>
 
             <highchart config="chart">
             </highchart>
 
-            <div class="well">
-                <p>Elapsed time: {{elapsed}}</p>
-                <p>Energy used: {{energy}}</p>
-            </div>
         </div>
 
     </div>

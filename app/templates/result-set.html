@@ -3,6 +3,8 @@
         {{completed}} / {{configs.length}}
     </progressbar>
 
+    <highchart config="chart"></highchart>
+
     <div ng-repeat="config in configs">
         <result title="config.title" planner="config.planner" show-body="{{false}}"></result>
     </div>

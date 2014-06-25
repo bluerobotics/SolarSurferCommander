@@ -20,6 +20,8 @@ directives.directive('resultSet', ['$timeout',
             transclude: true,
             scope: {
                 configs: '=',
+                chart: '=',
+                callback: '='
             },
             controller: function($scope, $element) {
             },
@@ -29,11 +31,17 @@ directives.directive('resultSet', ['$timeout',
                 // run all of the sims
                 var startNextPlanner = function() {
                     if(scope.completed < scope.configs.length) {
+                        // start each chart
+                        // wrap in a timeout to let the view update
                         $timeout(function(){
                             scope.configs[scope.completed].planner.start();
                             scope.completed = scope.completed + 1;
                             startNextPlanner();
                         }, 0);
+                    }
+                    else {
+                        // build the trade chart via callback
+                        if(scope.callback !== undefined) scope.callback();
                     }
                 };
                 startNextPlanner();

@@ -1,0 +1,9 @@
+<div>
+    <progressbar class="progress" ng-class="{'progress-striped active': progress < 100}" value="progress" type="success">
+        {{completed}} / {{configs.length}}
+    </progressbar>
+
+    <div ng-repeat="config in configs">
+        <result title="config.title" planner="config.planner" show-body="{{false}}"></result>
+    </div>
+</div>

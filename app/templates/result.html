@@ -1,0 +1,28 @@
+<div class="panel panel-default">
+    <div class="panel-heading" ng-click="showBody = !showBody">
+        {{title}}
+        <span class="glyphicon glyphicon-ok result-complete" ng-if="planner.complete"></span>
+    </div>
+    <div class="panel-body" ng-if="showBody">
+
+        <div ng-if="!complete">
+            This scenario has not been processed yet.
+        </div>
+
+        <div ng-if="complete">
+            <google-map center="map.center" zoom="map.zoom">
+                <polyline path="ideal_path.path"></polyline>
+                <polyline path="sim_path.path" stroke="sim_path.stroke"></polyline>
+            </google-map>
+
+            <highchart config="chart">
+            </highchart>
+
+            <div class="well">
+                <p>Elapsed time: {{elapsed}}</p>
+                <p>Energy used: {{energy}}</p>
+            </div>
+        </div>
+
+    </div>
+</div>

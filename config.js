@@ -1,6 +1,6 @@
 exports.config = {
   conventions: {
-    assets: /(^app\/assets|font)/,
+    assets: /(^app\/assets|bootstrap\/dist)/,
     ignored: /^(.*?\/)?[_]\w*/
   },
   modules: {

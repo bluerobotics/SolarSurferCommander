@@ -7,6 +7,7 @@ var app = angular.module('app', [
     // angular modules
     'ngRoute',
     // third-party modules
+    'ui.bootstrap',
     'google-maps',
     'highcharts-ng',
     // app modules
@@ -27,6 +28,16 @@ app.config(['$routeProvider', '$httpProvider', '$locationProvider',
     $routeProvider.when('/home', {
         templateUrl: 'templates/home.html',
         controller: 'HomeCtrl',
+        reloadOnSearch: false
+    });
+    $routeProvider.when('/trade/timeofyear', {
+        templateUrl: 'templates/trade.html',
+        controller: 'TradeCtrl',
+        reloadOnSearch: false
+    });
+    $routeProvider.when('/trade/seastate', {
+        templateUrl: 'templates/trade.html',
+        controller: 'SeaStateTradeCtrl',
         reloadOnSearch: false
     });
     $routeProvider.when('/help', {

@@ -18,6 +18,9 @@ controllers.controller('HomeCtrl', ['$scope', '$rootScope', '$timeout',
 
 controllers.controller('TradeCtrl', ['$scope', '$routeParams',
     function ($scope, $routeParams) {
+        // set title
+        $scope.title = $routeParams.id;
+
         // helper
         var numOfDays = function(planner) {
             var last_step = planner.data[planner.data.length-1];

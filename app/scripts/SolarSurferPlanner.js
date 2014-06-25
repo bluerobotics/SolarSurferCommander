@@ -5,19 +5,21 @@
 // SolarSuferPlanner, BlueRobotics
 
 // constructor
-function Planner(options) {
-    this.options = _.extend({}, _.clone(this.default_options), options);
+function Planner(config) {
+    this.config = _.extend({}, _.clone(this.default_config), config);
 }
 
 // defaults
-Planner.prototype.default_options = {
+Planner.prototype.default_config = {
     debug: true,
     date_start: moment(),
     date_delta: moment.duration(1, 'hour'),
     date_max: moment().add(moment.duration(6, 'months')),
     loc_start: new google.maps.LatLng(33.8823163, -118.4123013),
     loc_end: new google.maps.LatLng(19.1205301, -155.5010251),
-    nav_radius: new Qty('1 km')
+    nav_radius: new Qty('1 km'),
+    p_thruster: new Qty('60 W'),
+    sea_mult: new Qty('1')
 };
 
 // this is used as the data template during each step
@@ -26,12 +28,14 @@ Planner.prototype.data_template = {
     date: undefined,
 };
 
-// this is where the simulation results go
+// init instance vars
 Planner.prototype.data = [];
+Planner.prototype.complete = false;
+Planner.prototype.callback = undefined;
 
 // log to the logger
 Planner.prototype.log = function(data) {
-    if(this.options.debug) this.logger(data);
+    if(this.config.debug) this.logger(data);
 };
 
 // console logger
@@ -45,18 +49,18 @@ Planner.prototype.start = function() {
     this.data = [];
 
     // state vars
-    this.dt = new Qty(this.options.date_delta.asMilliseconds()+'ms');
+    this.dt = new Qty(this.config.date_delta.asMilliseconds()+'ms');
     var step, previous = {
         step: 0,
-        date: this.options.date_start.clone(),
-        loc: this.options.loc_start,
+        date: this.config.date_start.clone(),
+        loc: this.config.loc_start,
         energy: new Qty('0 J')
     };
 
     // loop
     this.log('### Starting the sim...');
     var at_end = false;
-    while(!at_end && previous.date < this.options.date_max) {
+    while(!at_end && previous.date < this.config.date_max) {
         // calculate step
         step = this.calculateStep(previous);
 
@@ -66,12 +70,14 @@ Planner.prototype.start = function() {
 
         // see if we reach the end
         var err_end = new Qty(google.maps.geometry.spherical.computeDistanceBetween(
-            this.options.loc_end,
+            this.config.loc_end,
             step.loc
         )+'m');
-        at_end = err_end.lt(this.options.nav_radius);
+        at_end = err_end.lt(this.config.nav_radius);
     }
     this.log('### Sim complete!');
+    this.complete = true;
+    if(this.callback !== undefined) this.callback(this);
 };
 
 // allow another class to inherit from Planner
@@ -83,7 +89,7 @@ Planner.prototype.calculateStep = function(previous) {
 
     // build on the previous step
     data.step = previous.step + 1;
-    data.date = previous.date.clone().add(this.options.date_delta);
+    data.date = previous.date.clone().add(this.config.date_delta);
 
     // do the actual sim logic
     this.calculateSolar(data, previous);
@@ -91,6 +97,7 @@ Planner.prototype.calculateStep = function(previous) {
     this.calculateSea(data, previous);
     this.calculateDrag(data, previous);
     this.calculateThrust(data, previous);
+    this.calculateThrusterPower(data, previous);
     this.calculateMovement(data, previous);
     this.calculatePowerUsed(data, previous);
 
@@ -119,7 +126,7 @@ Planner.prototype.calculatePowerAvailable = function(data, previous) {
 Planner.prototype.calculateSea = function(data, previous) {
     // calculate a historic or random sea current from the JPL OSCAR database
     data.sea_current = {
-        mag: new Qty('0.1 m/s'),
+        mag: new Qty('0.1 m/s').mul(this.config.sea_mult.scalar),
         dir: new Qty('-130 deg') // to the South
     };
 };
@@ -131,6 +138,16 @@ Planner.prototype.calculateDrag = function(data, previous) {
 // calculate thrust based on available battery power
 Planner.prototype.calculateThrust = function(data, previous) {
 	data.thrust = data.p_solar.div(new Qty('120.0 W')).mul(new Qty('26.7 N')); // Each thruster produces 3 lb at ~60 Watts
+};
+
+// calculate thruster power based on solar array charging state and power setting
+Planner.prototype.calculateThrusterPower = function(data, previous) {
+    if(data.p_solar.lt(this.config.p_thruster)) {
+        data.p_thruster = new Qty('0 W');
+    }
+    else {
+        data.p_thruster = this.config.p_thruster;
+    }
 };
 
 // calculate new position at the end of the step
@@ -155,10 +172,10 @@ Planner.prototype.calculateMovement = function(data, previous) {
         // drops off linearly with power. This isn't really true because drag is proportional
         // to the square of speed and thrust. It'll be close though.
         v = {
-            mag: data.p_solar.div(new Qty('120.0 W')).mul(new Qty('4.5 ft/s')),
+            mag: data.p_thruster.div(new Qty('120.0 W')).mul(new Qty('4.5 ft/s')).mul(2), // this is the fastest we could go
             dir: new Qty(google.maps.geometry.spherical.computeHeading(
                 previous.loc,
-                this.options.loc_end 
+                this.config.loc_end 
             )+'deg')
         };
     }
@@ -176,7 +193,7 @@ Planner.prototype.calculateMovement = function(data, previous) {
         x.dir.to('deg').scalar
     );
     data.dx_home = new Qty(google.maps.geometry.spherical.computeDistanceBetween(
-        this.options.loc_start,
+        this.config.loc_start,
         data.loc
     )+'m'); // probably in meters, API docs don't say
 };

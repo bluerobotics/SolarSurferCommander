@@ -1,4 +1,4 @@
-# SolarSurferPlanner
+# SolarSurferCommander
 
 Navigation planner for the [SolarSurfer](http://bluerobotics.com/) project.
 
@@ -20,8 +20,8 @@ The bulk of the planning calculations takes place in `app/scripts/SolarSurferPla
 Clone the repo, install the code, and start the server like this:
 
 ```bash
-git clone https://github.com/bluerobotics/SolarSurferPlanner.git
-cd SolarSurferPlanner
+git clone https://github.com/bluerobotics/SolarSurferCommander.git
+cd SolarSurferCommander
 npm install
 npm start
 ```

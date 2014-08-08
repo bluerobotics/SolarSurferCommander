@@ -64,17 +64,74 @@ controllers.controller('HomeCtrl', ['$scope', 'Telemetry',
             }]
         };
 
-        // populate map data
+        // chart data
+        $scope.chart = {
+            config: {
+                chart: {
+                    type: 'line',
+                    zoomType: 'x'
+                }
+            },
+            xAxis: {
+                type: 'datetime',
+                dateTimeLabelFormats: { // don't display the dummy year
+                    month: '%e. %b',
+                    year: '%b'
+                },
+                title: {
+                    text: 'Date'
+                }
+            },
+            yAxis: {
+                gridLineWidth: 0,
+                title: {
+                    text: 'Power (km)',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                }
+            },
+            series: [{
+                name: 'Solar Power (W)',
+                marker: {
+                    enabled: true
+                },
+                data: []
+            },{
+                name: 'Thruster Power (W)',
+                marker: {
+                    enabled: true
+                },
+                data: []
+            }],
+            title: {
+                text: ''
+            },
+            loading: false
+        };
+
+        // populate map and chart data
         Telemetry.query({
             // fields: 'data.latitude,data.longitude',
             sort: '_date'
         }, function(data){
+            var msg;
             for(var i = 0; i < data.items.length; i++) {
+                msg = data.items[i];
+
+                // map path
                 $scope.actual_path.path.push({
-                    latitude: data.items[i].data.latitude,
+                    latitude: msg.data.latitude,
                     longitude: data.items[i].data.longitude
                 });
+
+                // power data
+                var date = new Date(msg._date);
+                $scope.chart.series[0].data.push([date, msg.data.p_solar]);
+                $scope.chart.series[1].data.push([date, msg.data.p_load]);
             }
+
+            // recenter map
             $scope.map.center = path_average($scope.actual_path.path);
         });
     }]);

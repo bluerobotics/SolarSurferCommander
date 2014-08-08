@@ -9,7 +9,8 @@ controllers.controller('HomeCtrl', ['$scope', 'Telemetry',
         // get latest message
         $scope.last_update = Telemetry.query({
             limit: 1,
-            sort: '-_date'
+            sort: '-_date',
+            where: {"mission":"53e4e46ed824e81700b9014e"}
         });
 
         // map functions
@@ -113,7 +114,8 @@ controllers.controller('HomeCtrl', ['$scope', 'Telemetry',
         // populate map and chart data
         Telemetry.query({
             // fields: 'data.latitude,data.longitude',
-            sort: '_date'
+            sort: '_date',
+            where: {"mission":"53e4e46ed824e81700b9014e"}
         }, function(data){
             var msg;
             for(var i = 0; i < data.items.length; i++) {

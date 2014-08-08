@@ -6,10 +6,12 @@
 var app = angular.module('app', [
     // angular modules
     'ngRoute',
+    'ngResource',
     // third-party modules
     'ui.bootstrap',
     'google-maps',
     'highcharts-ng',
+    'angularMoment',
     // app modules
     'app.filters',
     'app.services',
@@ -27,7 +29,7 @@ app.config(['$routeProvider', '$httpProvider', '$locationProvider',
     // routes
     $routeProvider.when('/home', {
         templateUrl: 'templates/home.html',
-        controller: 'StaticCtrl',
+        controller: 'HomeCtrl',
         reloadOnSearch: false
     });
     $routeProvider.when('/planning/nominal', {

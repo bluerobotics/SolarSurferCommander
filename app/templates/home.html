@@ -3,29 +3,24 @@
         Telemetry
     </div>
     <div class="panel-body">
-        <!-- <div class="row">
+        <div class="row">
             <div class="col-md-6">
-                <google-map center="map.center" zoom="map.zoom" options="map.options" draggable="true">
-                    <polyline path="ideal_path.path"></polyline>
-                    <polyline path="sim_path.path" stroke="sim_path.stroke"></polyline>
+                <google-map center="map.center" zoom="map.zoom" options="map.options" draggable="true" ng-if="actual_path.path.length > 0">
+                    <polyline path="actual_path.path" stroke="actual_path.stroke"></polyline>
                 </google-map>
             </div>
             <div class="col-md-6">
-                <div class="well">
-                    <p>Elapsed time: {{elapsed}}</p>
-                    <p>Sim steps: {{planner.data.length}}</p>
-                    <p>Energy used: {{energy}}</p>
-                </div>
+                <pre>{{last_update.items[0].data | json}}</pre>
             </div>
         </div>
 
-        <highchart config="chart">
-        </highchart> -->
+        {{actual_path}}
 
-        todo...
+        <!-- <highchart config="chart">
+        </highchart> -->
     </div>
     <div class="panel-footer">
-        <small>Last message: 10 minutes, Next message: 4 minutes</small>
+        <small>Last message received <span am-time-ago="last_update.items[0]._date"></span>, {{last_update.meta.count}} total messages</small>
     </div>
 </div>
 

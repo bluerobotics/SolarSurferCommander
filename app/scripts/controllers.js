@@ -4,10 +4,66 @@
 
 var controllers = angular.module('app.controllers', []);
 
+controllers.controller('HomeCtrl', ['$scope', 'Telemetry',
+    function ($scope, Telemetry) {
+        // get latest message
+        $scope.last_update = Telemetry.query({
+            limit: 1,
+            sort: '-_date'
+        });
+
+        // map config
+        $scope.map = {
+            center: {
+                latitude: 33.870697021484375,
+                longitude: -118.36988067626953
+            },
+            zoom: 20,
+            options: {
+                panControl: false,
+                zoomControl: true,
+                mapTypeControl: true,
+                scaleControl: false,
+                streetViewControl: false,
+                overviewMapControl: false
+            }
+        };
+
+        // build GPS path
+        $scope.actual_path = {
+            path: [],
+            stroke: {
+                color: '#FF0000',
+                weight: 3
+            },
+            refresh: false,
+            // icons: [{
+            //     icon: {
+            //         path: google.maps.SymbolPath.BACKWARD_OPEN_ARROW
+            //     },
+            //     offset: '25px',
+            //     repeat: '50px'
+            // }]
+        };
+
+        // populate map data
+        Telemetry.query({
+            // fields: 'data.latitude,data.longitude',
+            sort: '_date'
+        }, function(data){
+            for(var i = 0; i < data.items.length; i++) {
+                $scope.actual_path.path.push({
+                    latitude: data.items[i].data.latitude,
+                    longitude: data.items[i].data.longitude
+                });
+            }
+            $scope.actual_path.refresh = true;
+        });
+    }]);
+
 controllers.controller('LayoutCtrl', ['$scope', '$location',
     function ($scope, $location) {
         $scope.isActive = function (navBarPath) {
-            console.log($location)
             return navBarPath === $location.path().split('/')[1];
         };
     }]);

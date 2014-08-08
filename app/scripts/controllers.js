@@ -4,7 +4,15 @@
 
 var controllers = angular.module('app.controllers', []);
 
-controllers.controller('HomeCtrl', ['$scope', '$rootScope', '$timeout',
+controllers.controller('LayoutCtrl', ['$scope', '$location',
+    function ($scope, $location) {
+        $scope.isActive = function (navBarPath) {
+            console.log($location)
+            return navBarPath === $location.path().split('/')[1];
+        };
+    }]);
+
+controllers.controller('NominalCtrl', ['$scope', '$rootScope', '$timeout',
     function ($scope, $rootScope, $timeout) {
         // SolarSurfer mission planner
         $scope.planner = new Planner();

@@ -27,12 +27,22 @@ app.config(['$routeProvider', '$httpProvider', '$locationProvider',
     // routes
     $routeProvider.when('/home', {
         templateUrl: 'templates/home.html',
-        controller: 'HomeCtrl',
+        controller: 'StaticCtrl',
         reloadOnSearch: false
     });
-    $routeProvider.when('/trade/:id', {
+    $routeProvider.when('/planning/nominal', {
+        templateUrl: 'templates/nominal.html',
+        controller: 'NominalCtrl',
+        reloadOnSearch: false
+    });
+    $routeProvider.when('/planning/:id', {
         templateUrl: 'templates/trade.html',
         controller: 'TradeCtrl',
+        reloadOnSearch: false
+    });
+    $routeProvider.when('/config', {
+        templateUrl: 'templates/config.html',
+        controller: 'StaticCtrl',
         reloadOnSearch: false
     });
     $routeProvider.when('/help', {

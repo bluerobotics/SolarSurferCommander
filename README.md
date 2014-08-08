@@ -1,6 +1,6 @@
 # SolarSurferCommander
 
-Navigation planner for the [SolarSurfer](http://bluerobotics.com/) project.
+Navigation planner and command builder for the [SolarSurfer](http://bluerobotics.com/) project.
 
 ## Overview
 
@@ -32,7 +32,11 @@ The planner should now be available at [http://localhost:4444/](http://localhost
 
 This project uses [semantic versioning](http://semver.org/).
 
-### v0.1.0 - tbd
+### v0.2.0 - tbd
+
+* Refactored from SolarSurferPlanner to SolarSurferCommander
+
+### v0.1.0 - 2014/06/25
 
 * Initial release
 

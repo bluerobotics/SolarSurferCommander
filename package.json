@@ -5,7 +5,8 @@
   "scripts": {
     "preinstall": "rm -rf node_modules bower_components",
     "postinstall": "node_modules/bower/bin/bower install --config.interactive=false",
-    "start": "node_modules/brunch/bin/brunch watch --server --port 4444"
+    "start": "node_modules/brunch/bin/brunch watch --server --port 4444",
+    "upload": "ssh surfer.bluerobotics.com 'rm -rf ~/surfer.bluerobotics.com/*'; scp -r _public/. surfer.bluerobotics.com:~/surfer.bluerobotics.com"
   },
   "repository": {
     "type": "git",

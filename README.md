@@ -40,6 +40,10 @@ This project uses [semantic versioning](http://semver.org/).
 
 * Initial release
 
+## Todo
+
+* brunch doesn't copy .htaccess to _public
+
 ## Screenshot
 
 ![Screenshot](screenshot.png)

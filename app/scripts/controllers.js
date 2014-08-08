@@ -12,13 +12,32 @@ controllers.controller('HomeCtrl', ['$scope', 'Telemetry',
             sort: '-_date'
         });
 
+        // map functions
+        var path_average = function(path) {
+            var latitude = 0, longitude = 0;
+            for(var i = 0; i < path.length; i++) {
+                latitude += path[i].latitude;
+                longitude += path[i].longitude;
+            }
+            return {
+                latitude: latitude/path.length,
+                longitude: longitude/path.length
+            };
+        };
+        // var path_bounds = function(path) {
+        //     return {
+        //         northeast: {latitude: 51.219053, longitude: 4.404418 },
+        //         southwest: {latitude: 51.219053, longitude: 4.404418 }
+        //     };
+        // };
+
         // map config
         $scope.map = {
             center: {
-                latitude: 33.870697021484375,
-                longitude: -118.36988067626953
+                latitude: 33.87,
+                longitude: -118.36
             },
-            zoom: 20,
+            zoom: 11,
             options: {
                 panControl: false,
                 zoomControl: true,
@@ -36,14 +55,13 @@ controllers.controller('HomeCtrl', ['$scope', 'Telemetry',
                 color: '#FF0000',
                 weight: 3
             },
-            refresh: false,
-            // icons: [{
-            //     icon: {
-            //         path: google.maps.SymbolPath.BACKWARD_OPEN_ARROW
-            //     },
-            //     offset: '25px',
-            //     repeat: '50px'
-            // }]
+            icons: [{
+                icon: {
+                    path: google.maps.SymbolPath.BACKWARD_OPEN_ARROW
+                },
+                offset: '25px',
+                repeat: '50px'
+            }]
         };
 
         // populate map data
@@ -57,7 +75,7 @@ controllers.controller('HomeCtrl', ['$scope', 'Telemetry',
                     longitude: data.items[i].data.longitude
                 });
             }
-            $scope.actual_path.refresh = true;
+            $scope.map.center = path_average($scope.actual_path.path);
         });
     }]);
 

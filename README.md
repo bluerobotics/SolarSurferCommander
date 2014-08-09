@@ -51,15 +51,17 @@ This project uses [semantic versioning](http://semver.org/).
 ### v0.2.1 - 2014/08/09
 
 * Refactored "current mission" page into separate pages for better iOS use
+* Added apple-touch-icon for better "add to home screen" experience on iOS
 * Live-updating telemetry
-* Added individual marker for each telemetry message in map
-* Fixed arrow direction in map
-* Added current user location in map
-
-TODO:
-
-* Fixed timestamps in graph
-* Added voltage graph
+* Map
+  * Added individual markers for each telemetry message (black markers)
+  * Added a marker for the latest position (red marker)
+  * Added a marker for the user's current position (green marker)
+  * Fixed direction of arrows on SolarSurfer path
+* Graph
+  * Enabled x-zooming
+  * Fixed timestamps
+  * Added voltage plots
 
 ### v0.2.0 - 2014/08/08
 

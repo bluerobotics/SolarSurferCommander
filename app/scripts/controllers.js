@@ -10,13 +10,16 @@ controllers.controller('LayoutCtrl', ['$scope', '$location', 'LiveTelemetry', 'm
             return navBarPath === $location.path().split('/')[1];
         };
 
+        // init the LiveTelemetry process for the app
         LiveTelemetry.init(mission);
-        $scope.last_update = {};
 
-        $scope.$on('telemetry-init', function(event, items) {
-            if(items.length > 0)
-                angular.extend($scope.last_update, items[0]);
-        });
+        // initial data
+        $scope.last_update = {};
+        var items = LiveTelemetry.items();
+        if(items.length > 0)
+            angular.extend($scope.last_update, items[0]);
+
+        // respond to LiveTelemetry updates
         $scope.$on('telemetry-update', function(event, items) {
             if(items.length > 0)
                 angular.extend($scope.last_update, items[0]);
@@ -126,21 +129,20 @@ controllers.controller('MapCtrl', ['$scope', '$interval', 'LiveTelemetry', 'poll
         });
     }]);
 
-controllers.controller('GraphCtrl', ['$scope', 'Telemetry',
-    function ($scope, Telemetry) {
-        // get latest message
-        $scope.last_update = Telemetry.query({
-            limit: 1,
-            sort: '-_date',
-            where: {"mission":"53e4e46ed824e81700b9014e"}
-        });
-
-        // chart data
-        $scope.chart = {
-            config: {
+controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
+    function ($scope, LiveTelemetry) {
+        // chart config
+        var chart_defaults = {
+            options: {
                 chart: {
                     type: 'line',
                     zoomType: 'x'
+                },
+                tooltip: {
+                    shared: true
+                },
+                exporting: {
+                    enabled: false
                 }
             },
             xAxis: {
@@ -153,7 +155,16 @@ controllers.controller('GraphCtrl', ['$scope', 'Telemetry',
                     text: 'Date'
                 }
             },
-            yAxis: {
+            title: {
+                text: ''
+            },
+            loading: false
+        };
+
+        // power chart
+        $scope.power_chart = angular.copy(chart_defaults);
+        angular.extend($scope.power_chart, {
+            yAxis: [{
                 gridLineWidth: 0,
                 title: {
                     text: 'Power (W)',
@@ -161,7 +172,16 @@ controllers.controller('GraphCtrl', ['$scope', 'Telemetry',
                         color: Highcharts.getOptions().colors[0]
                     }
                 }
-            },
+            },{
+                gridLineWidth: 0,
+                title: {
+                    text: 'Voltage (V)',
+                    style: {
+                        color: Highcharts.getOptions().colors[2]
+                    }
+                },
+                opposite: true
+            }],
             series: [{
                 name: 'Solar Power (W)',
                 marker: {
@@ -169,34 +189,120 @@ controllers.controller('GraphCtrl', ['$scope', 'Telemetry',
                 },
                 data: []
             },{
-                name: 'Thruster Power (W)',
+                name: 'Load Power (W)',
                 marker: {
                     enabled: true
                 },
                 data: []
+            },{
+                yAxis: 1,
+                name: 'Load Voltage (V)',
+                marker: {
+                    enabled: true
+                },
+                data: []
+            }]
+        });
+
+        // nav chart
+        $scope.nav_chart = angular.copy(chart_defaults);
+        angular.extend($scope.nav_chart, {
+            yAxis: [{
+                gridLineWidth: 0,
+                title: {
+                    text: 'Waypoint Index',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                }
+            },{
+                gridLineWidth: 0,
+                title: {
+                    text: 'Heading (degrees)',
+                    style: {
+                        color: Highcharts.getOptions().colors[2]
+                    }
+                },
+                opposite: true
             }],
-            title: {
-                text: ''
-            },
-            loading: false
+            series: [{
+                name: 'Waypoint Index',
+                marker: {
+                    enabled: true
+                },
+                data: []
+            },{
+                yAxis: 1,
+                name: 'Heading (degrees)',
+                marker: {
+                    enabled: true
+                },
+                data: []
+            }]
+        });
+
+        // telem chart
+        $scope.telem_chart = angular.copy(chart_defaults);
+        angular.extend($scope.telem_chart, {
+            yAxis: [{
+                gridLineWidth: 0,
+                title: {
+                    text: 'Telemetry Counts',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                }
+            },{
+                gridLineWidth: 0,
+                title: {
+                    text: 'Command Counts',
+                    style: {
+                        color: Highcharts.getOptions().colors[2]
+                    }
+                },
+                opposite: true
+            }],
+            series: [{
+                name: 'Telemetry Counts',
+                marker: {
+                    enabled: true
+                },
+                data: []
+            },{
+                yAxis: 1,
+                name: 'Command Counts',
+                marker: {
+                    enabled: true
+                },
+                data: []
+            }]
+        });
+
+        var add_data = function(items) {
+            for(var i = items.length - 1; i >= 0; i--) {
+                var date = new Date(items[i]._date).getTime();
+
+                // power chart
+                $scope.power_chart.series[0].data.push([date, items[i].data.p_solar]);
+                $scope.power_chart.series[1].data.push([date, items[i].data.p_load]);
+                $scope.power_chart.series[2].data.push([date, items[i].data.v_load]);
+
+                // nav chart
+                $scope.nav_chart.series[0].data.push([date, items[i].data.currentWaypointIndex]);
+                $scope.nav_chart.series[1].data.push([date, items[i].data.heading]);
+
+                // telem chart
+                $scope.telem_chart.series[0].data.push([date, items[i].data.telemetryCount]);
+                $scope.telem_chart.series[1].data.push([date, items[i].data.commandCount]);
+            }
         };
 
-        // populate map and chart data
-        Telemetry.query({
-            // fields: 'data.latitude,data.longitude',
-            sort: '_date',
-            limit: 500,
-            where: {"mission":"53e4e46ed824e81700b9014e"}
-        }, function(data){
-            var msg;
-            for(var i = 0; i < data.items.length; i++) {
-                msg = data.items[i];
+        // initial data
+        add_data(LiveTelemetry.items());
 
-                // power data
-                var date = new Date(msg._date);
-                $scope.chart.series[0].data.push([date, msg.data.p_solar]);
-                $scope.chart.series[1].data.push([date, msg.data.p_load]);
-            }
+        // respond to LiveTelemetry updates
+        $scope.$on('telemetry-update', function(event, items) {
+            add_data(items);
         });
     }]);
 

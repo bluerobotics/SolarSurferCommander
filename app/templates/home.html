@@ -1,6 +1,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         Telemetry
+        <span class="label label-primary pull-right">Update <span am-time-ago="last_update.items[0]._date"></span></span>
     </div>
     <div class="panel-body">
         <div class="row">
@@ -18,7 +19,7 @@
         </highchart>
     </div>
     <div class="panel-footer">
-        <small>Last message received <span am-time-ago="last_update.items[0]._date"></span>, {{last_update.meta.count}} total messages</small>
+        <small>{{last_update.meta.count}} total messages</small>
     </div>
 </div>
 

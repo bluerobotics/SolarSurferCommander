@@ -58,7 +58,7 @@ controllers.controller('HomeCtrl', ['$scope', 'Telemetry',
             },
             icons: [{
                 icon: {
-                    path: google.maps.SymbolPath.BACKWARD_OPEN_ARROW
+                    path: google.maps.SymbolPath.FORWARD_OPEN_ARROW
                 },
                 offset: '25px',
                 repeat: '50px'
@@ -115,6 +115,7 @@ controllers.controller('HomeCtrl', ['$scope', 'Telemetry',
         Telemetry.query({
             // fields: 'data.latitude,data.longitude',
             sort: '_date',
+            limit: 500,
             where: {"mission":"53e4e46ed824e81700b9014e"}
         }, function(data){
             var msg;

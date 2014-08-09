@@ -23,8 +23,8 @@ controllers.controller('LayoutCtrl', ['$scope', '$location', 'LiveTelemetry', 'm
         });
     }]);
 
-controllers.controller('MapCtrl', ['$scope', 'LiveTelemetry',
-    function ($scope, LiveTelemetry) {
+controllers.controller('MapCtrl', ['$scope', '$interval', 'LiveTelemetry', 'pollrate', 'geolocation',
+    function ($scope, $interval, LiveTelemetry, pollrate, geolocation) {
         // map config
         var map_instance, surfer_marker, user_marker;
         $scope.map = {
@@ -43,10 +43,9 @@ controllers.controller('MapCtrl', ['$scope', 'LiveTelemetry',
                 scrollWheel: false
             }
         };
-        $scope.marker = {
-            id: 0,
-            coords: {
-            },
+        $scope.surfer_marker = {
+            id: 'surfer',
+            coords: {},
             options: { draggable: false },
             events: {
                 // dragend: function (marker, eventName, args) {
@@ -56,6 +55,22 @@ controllers.controller('MapCtrl', ['$scope', 'LiveTelemetry',
                 // }
             }
         };
+        $scope.user_marker = {
+            id: 'user',
+            icon: '/img/green-marker.png',
+            coords: {},
+            options: {},
+            events: {}
+        };
+
+        // user location
+        var update_user_location = function() {
+            geolocation.getLocation().then(function(data) {
+                $scope.user_marker.coords = data.coords;
+            });
+        };
+        update_user_location();
+        $interval(update_user_location, pollrate);
 
         // build GPS path
         $scope.actual_path = {
@@ -89,7 +104,7 @@ controllers.controller('MapCtrl', ['$scope', 'LiveTelemetry',
 
         // process current marker position
         if(items.length > 0)
-            $scope.marker.coords = $scope.actual_path.path[0];
+            $scope.surfer_marker.coords = $scope.actual_path.path[0];
 
         // respond to LiveTelemetry updates
         $scope.$on('telemetry-update', function(event, items) {
@@ -107,7 +122,7 @@ controllers.controller('MapCtrl', ['$scope', 'LiveTelemetry',
 
             // process current marker position
             if(items.length > 0)
-                angular.extend($scope.marker.coords, $scope.actual_path.path[0]);
+                angular.extend($scope.surfer_marker.coords, $scope.actual_path.path[0]);
         });
     }]);
 

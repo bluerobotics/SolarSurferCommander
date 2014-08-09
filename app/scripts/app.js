@@ -12,6 +12,7 @@ var app = angular.module('app', [
     'google-maps',
     'highcharts-ng',
     'angularMoment',
+    'geolocation',
     // app modules
     'app.filters',
     'app.services',

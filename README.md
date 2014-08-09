@@ -42,7 +42,8 @@ This project uses [semantic versioning](http://semver.org/).
 
 * commanding
 * marker pop-up with date, gps coords, speed, current waypoint #
-* build-your-own graphs
+* build-your-own graphs / plots
+* overlay planned waypoints by parsing command messages
 * mission select
 
 ### v0.2.1 - 2014/08/09
@@ -51,10 +52,10 @@ This project uses [semantic versioning](http://semver.org/).
 * Live-updating telemetry
 * Added individual marker for each telemetry message in map
 * Fixed arrow direction in map
+* Added current user location in map
 
 TODO:
 
-* Added current user location in map
 * Fixed timestamps in graph
 * Added voltage graph
 

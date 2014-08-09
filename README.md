@@ -38,9 +38,25 @@ npm run-script upload
 
 This project uses [semantic versioning](http://semver.org/).
 
+### future - future
+
+* commanding
+* marker pop-up with date, gps coords, speed, current waypoint #
+* build-your-own graphs
+* mission select
+
 ### v0.2.1 - 2014/08/09
 
 * Refactored "current mission" page into separate pages for better iOS use
+* Live-updating telemetry
+* Added individual marker for each telemetry message in map
+* Fixed arrow direction in map
+
+TODO:
+
+* Added current user location in map
+* Fixed timestamps in graph
+* Added voltage graph
 
 ### v0.2.0 - 2014/08/08
 

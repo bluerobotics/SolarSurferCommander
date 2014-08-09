@@ -23,30 +23,8 @@ controllers.controller('LayoutCtrl', ['$scope', '$location', 'LiveTelemetry', 'm
         });
     }]);
 
-controllers.controller('MapCtrl', ['$scope', 'Telemetry', 'LiveTelemetry',
-    function ($scope, Telemetry, LiveTelemetry) {
-        // map functions
-        var path_average = function(path) {
-            var latitude = 0, longitude = 0;
-            for(var i = 0; i < path.length; i++) {
-                latitude += path[i].latitude;
-                longitude += path[i].longitude;
-            }
-            return {
-                latitude: latitude/path.length,
-                longitude: longitude/path.length
-            };
-        };
-        // var path_bounds = function(path) {
-        //     return {
-        //         northeast: {latitude: 51.219053, longitude: 4.404418 },
-        //         southwest: {latitude: 51.219053, longitude: 4.404418 }
-        //     };
-        // };
-        var init_surfer_marker = function() {
-            // if(map_instance !== undefined )
-        };
-
+controllers.controller('MapCtrl', ['$scope', 'LiveTelemetry',
+    function ($scope, LiveTelemetry) {
         // map config
         var map_instance, surfer_marker, user_marker;
         $scope.map = {
@@ -62,25 +40,8 @@ controllers.controller('MapCtrl', ['$scope', 'Telemetry', 'LiveTelemetry',
                 scaleControl: false,
                 streetViewControl: false,
                 overviewMapControl: false,
-                scrollWheel: false,
-                //mapTypeId: google.maps.MapTypeId.TERRAIN
-                // terrain type is cool but prevent maximum zoom
-            },
-            // events: {
-            //     tilesloaded: function (map) {
-            //         $scope.$apply(function () {
-            //             console.log('this is the map instance', map);
-
-
-            //             // build marker outside of angular-google-maps since RichMarker isn't supported yet
-            //             // var surfer_marker = new RichMarker({
-            //             //     // position: pointToMoveTo,
-            //             //     map: map,
-            //             //     content: '<div class="pulse2">test</div>',
-            //             // });
-            //         });
-            //     }
-            // }
+                scrollWheel: false
+            }
         };
         $scope.marker = {
             id: 0,
@@ -113,25 +74,24 @@ controllers.controller('MapCtrl', ['$scope', 'Telemetry', 'LiveTelemetry',
             }]
         };
 
-        // populate map and chart data
-        $scope.$on('telemetry-init', function(event, items) {
-            // process line and marker positions
-            for(var i = 0; i < items.length; i++) {
-                $scope.actual_path.path.push({
-                    id: items[i]._id,
-                    latitude: items[i].data.latitude,
-                    longitude: items[i].data.longitude,
-                    icon: '/img/black-marker.png'
-                });
-            }
+        // initial data
+        var items = LiveTelemetry.items();
 
-            // process current marker position
-            if(items.length > 0)
-                $scope.marker.coords = $scope.actual_path.path[0];
+        // process line and marker positions
+        for(var i = 0; i < items.length; i++) {
+            $scope.actual_path.path.push({
+                id: items[i]._id,
+                latitude: items[i].data.latitude,
+                longitude: items[i].data.longitude,
+                icon: '/img/black-marker.png'
+            });
+        }
 
-            // recenter map
-            // $scope.map.center = path_average($scope.actual_path.path);
-        });
+        // process current marker position
+        if(items.length > 0)
+            $scope.marker.coords = $scope.actual_path.path[0];
+
+        // respond to LiveTelemetry updates
         $scope.$on('telemetry-update', function(event, items) {
             // process line and marker positions
             var new_paths = [];
@@ -181,7 +141,7 @@ controllers.controller('GraphCtrl', ['$scope', 'Telemetry',
             yAxis: {
                 gridLineWidth: 0,
                 title: {
-                    text: 'Power (km)',
+                    text: 'Power (W)',
                     style: {
                         color: Highcharts.getOptions().colors[0]
                     }
@@ -222,6 +182,21 @@ controllers.controller('GraphCtrl', ['$scope', 'Telemetry',
                 $scope.chart.series[0].data.push([date, msg.data.p_solar]);
                 $scope.chart.series[1].data.push([date, msg.data.p_load]);
             }
+        });
+    }]);
+
+controllers.controller('TelemetryCtrl', ['$scope', 'LiveTelemetry',
+    function ($scope, LiveTelemetry) {
+        // initial data
+        $scope.data = {};
+        var items = LiveTelemetry.items();
+        if(items.length > 0)
+            angular.extend($scope.data, items[0]);
+
+        // respond to LiveTelemetry updates
+        $scope.$on('telemetry-update', function(event, items) {
+            if(items.length > 0)
+                angular.extend($scope.data, items[0]);
         });
     }]);
 

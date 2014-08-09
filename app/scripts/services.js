@@ -12,12 +12,7 @@ services.factory('Telemetry', ['$resource',
             {id:'@id'},
             {
                 'query': {
-                    method: 'GET',
-                    // params: {id: '@id'},
-                    // transformResponse: function(data) {
-                    //     return angular.fromJson(data).items;
-                    // },
-                    // isArray: true
+                    method: 'GET'
                 }
             }
         );
@@ -30,6 +25,25 @@ services.factory('LiveTelemetry', ['$rootScope', '$interval', 'pollrate', 'Telem
         var promise;
         var items = [];
 
+        // update function
+        var update = function(mission) {
+            var params = {
+                sort: '-_date',
+                limit: 1000,
+                where: { mission: mission }
+            };
+            if(items.length > 0)
+                params.where._date = { $gt: items[0]._date };
+
+            // stupid angular removes $gt, so stringify it ahead of time
+            params.where = JSON.stringify(params.where);
+
+            Telemetry.query(params, function(data){
+                items = data.items.concat(items);
+                $rootScope.$broadcast('telemetry-update', data.items);
+            });
+        };
+
         // public functions
         return {
             init: function(mission){
@@ -38,32 +52,11 @@ services.factory('LiveTelemetry', ['$rootScope', '$interval', 'pollrate', 'Telem
 
                 // create initial request
                 console.log('Initiating live telemetry polling for', mission);
-                Telemetry.query({
-                    sort: '-_date',
-                    limit: 1000,
-                    where: { mission: mission }
-                }, function(data){
-                    items = data.items;
-                    $rootScope.$broadcast('telemetry-init', items);
-                });
+                update(mission);
 
                 // periodically poll for updates
                 promise = $interval(function(){
-                    var params = {
-                        sort: '-_date',
-                        limit: 1000,
-                        where: { mission: mission }
-                    };
-                    if(items.length > 0)
-                        params.where._date = { $gt: items[0]._date };
-
-                    // stupid angular removes $gt, so stringify it ahead of time
-                    params.where = JSON.stringify(params.where);
-
-                    Telemetry.query(params, function(data){
-                        items = data.items.concat(items);
-                        $rootScope.$broadcast('telemetry-update', data.items);
-                    });
+                    update(mission);
                 }, pollrate);
             },
             items: function(){

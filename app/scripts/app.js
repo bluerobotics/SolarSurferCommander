@@ -19,7 +19,7 @@ var app = angular.module('app', [
     'app.controllers'
 ]);
 
-app.value('version', '0.1.0');
+app.value('version', '0.2.0');
 
 app.config(['$routeProvider', '$httpProvider', '$locationProvider',
         function($routeProvider, $httpProvider, $locationProvider) {
@@ -27,9 +27,29 @@ app.config(['$routeProvider', '$httpProvider', '$locationProvider',
     $locationProvider.html5Mode(true);
 
     // routes
-    $routeProvider.when('/home', {
-        templateUrl: 'templates/home.html',
-        controller: 'HomeCtrl',
+    $routeProvider.when('/map', {
+        templateUrl: 'templates/map.html',
+        controller: 'MapCtrl',
+        reloadOnSearch: false
+    });
+    $routeProvider.when('/graph', {
+        templateUrl: 'templates/graph.html',
+        controller: 'GraphCtrl',
+        reloadOnSearch: false
+    });
+    $routeProvider.when('/telemetry', {
+        templateUrl: 'templates/telemetry.html',
+        controller: 'StaticCtrl',
+        reloadOnSearch: false
+    });
+    $routeProvider.when('/commanding', {
+        templateUrl: 'templates/commanding.html',
+        controller: 'StaticCtrl',
+        reloadOnSearch: false
+    });
+    $routeProvider.when('/settings', {
+        templateUrl: 'templates/settings.html',
+        controller: 'StaticCtrl',
         reloadOnSearch: false
     });
     $routeProvider.when('/planning/nominal', {
@@ -42,17 +62,12 @@ app.config(['$routeProvider', '$httpProvider', '$locationProvider',
         controller: 'TradeCtrl',
         reloadOnSearch: false
     });
-    $routeProvider.when('/config', {
-        templateUrl: 'templates/config.html',
-        controller: 'StaticCtrl',
-        reloadOnSearch: false
-    });
     $routeProvider.when('/help', {
         templateUrl: 'templates/help.html',
         controller: 'StaticCtrl',
         reloadOnSearch: false
     });
-    $routeProvider.otherwise({redirectTo: '/home'});
+    $routeProvider.otherwise({redirectTo: '/map'});
 }]);
 
 // hide moment Date() fallback warning

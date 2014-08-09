@@ -3,13 +3,14 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>SolarSuferCommander</title>
-        
+        <title>SolarSufer</title>
+
         <link href="/img/favicon.png" rel="shortcut icon">
+        <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
         <link href="/css/app.css" rel="stylesheet">
 
         <script>
@@ -25,43 +26,49 @@
     </head>
 
     <body>
-        <div>
-            <!-- Fixed navbar -->
-            <div class="navbar navbar-default navbar-fixed-top" role="navigation" ng-cloak ng-controller="LayoutCtrl">
-                <div class="container">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
+        <!-- Start navbar -->
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation" ng-cloak ng-controller="LayoutCtrl">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
 
-                        <a class="navbar-brand" href="/"><img src="/img/BlueRobotics-SolarSurfer-Icon.png" alt="SolarSurferCommander"></a>
-                    </div>
-                    <div class="navbar-collapse collapse">
+                    <a class="navbar-brand" href="/"><img src="/img/BlueRobotics-SolarSurfer-Icon.png" alt="SolarSurferCommander"></a>
+                </div>
+                <div class="navbar-collapse collapse" ng-class="{'in':!navCollapsed}">
 
-                        <ul class="nav navbar-nav">
-                            <li ng-class="{active:isActive('home')}"><a href="/">Current Mission</a></li>
-                            <li ng-class="{active:isActive('config')}"><a href="/config">Vehicle Config</a></li>
-                            <li class="dropdown" ng-class="{active:isActive('planning')}">
-                                <a href="#" class="dropdown-toggle">Planning <b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="/planning/nominal">Nominal Mission</a></li>
-                                    <li><a href="/planning/timeofyear">Time of Year</a></li>
-                                    <li><a href="/planning/throttlesetting">Throttle Setting</a></li>
-                                    <li><a href="/planning/throttlecuttoff">Throttle Cutoff</a></li>
-                                    <li><a href="/planning/seastate">Sea State</a></li>
-                                    <li><a href="/planning/simresolution">Sim Resolution</a></li>
-                                </ul>
-                            </li>
-                        </ul>
+                    <ul class="nav navbar-nav">
+                        <li ng-class="{active:isActive('map')}"><a href="/map">Map</a></li>
+                        <li ng-class="{active:isActive('graph')}"><a href="/graph">Graph</a></li>
+                        <li ng-class="{active:isActive('telemetry')}"><a href="/telemetry">Telemetry</a></li>
+                        <li ng-class="{active:isActive('commanding')}"><a href="/commanding">Commanding</a></li>
+                        <li ng-class="{active:isActive('settings')}"><a href="/settings">Settings</a></li>
+                        <li class="dropdown" ng-class="{active:isActive('planning')}">
+                            <a href="#" class="dropdown-toggle">Planning <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/planning/nominal">Nominal Mission</a></li>
+                                <li><a href="/planning/timeofyear">Time of Year</a></li>
+                                <li><a href="/planning/throttlesetting">Throttle Setting</a></li>
+                                <li><a href="/planning/throttlecuttoff">Throttle Cutoff</a></li>
+                                <li><a href="/planning/seastate">Sea State</a></li>
+                                <li><a href="/planning/simresolution">Sim Resolution</a></li>
+                            </ul>
+                        </li>
+                    </ul>
 
-                    </div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="../navbar/">Default</a></li>
+                    </ul>
+
                 </div>
             </div>
         </div>
-        <!-- end navbar -->
+        <!-- End navbar -->
+
 
         <!-- Start content -->
         <div class="container" ng-cloak ng-view>

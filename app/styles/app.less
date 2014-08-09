@@ -34,24 +34,44 @@ body {
     }
 }
 
+/* Map page
+-------------------------------------------------- */
+
+.page-map {
+    .angular-google-map {
+        position: fixed;
+        top: 50px;
+        bottom: 50px;
+        left: 0;
+        right: 0;
+    }
+
+    .angular-google-map-container {
+        height: 100%;
+    }
+}
+
 /* Result directive
 -------------------------------------------------- */
 
-.angular-google-map-container { height: 400px; }
+.directive-result {
+    .angular-google-map-container { height: 400px; }
 
-google-map div {
-    border-radius: @panel-border-radius;
+    google-map div {
+        border-radius: @panel-border-radius;
+    }
+
+    .highcharts-container {
+        margin-top: @body-content-padding;
+    }
+
+    .panel-heading {
+        cursor: pointer;
+    }
+
+    .result-complete {
+        float: right;
+        color: @brand-success;
+    }
 }
 
-.highcharts-container {
-    margin-top: @body-content-padding;
-}
-
-.panel-heading {
-    cursor: pointer;
-}
-
-.result-complete {
-    float: right;
-    color: @brand-success;
-}

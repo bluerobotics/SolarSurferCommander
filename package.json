@@ -1,6 +1,6 @@
 {
   "name": "SolarSurferPlanner",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Navigation planner for the SolarSurfer project.",
   "scripts": {
     "preinstall": "rm -rf node_modules bower_components",

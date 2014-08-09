@@ -4,15 +4,15 @@
 
 var controllers = angular.module('app.controllers', []);
 
-controllers.controller('HomeCtrl', ['$scope', 'Telemetry',
-    function ($scope, Telemetry) {
-        // get latest message
-        $scope.last_update = Telemetry.query({
-            limit: 1,
-            sort: '-_date',
-            where: {"mission":"53e4e46ed824e81700b9014e"}
-        });
+controllers.controller('LayoutCtrl', ['$scope', '$location',
+    function ($scope, $location) {
+        $scope.isActive = function (navBarPath) {
+            return navBarPath === $location.path().split('/')[1];
+        };
+    }]);
 
+controllers.controller('MapCtrl', ['$scope', 'Telemetry',
+    function ($scope, Telemetry) {
         // map functions
         var path_average = function(path) {
             var latitude = 0, longitude = 0;
@@ -38,7 +38,7 @@ controllers.controller('HomeCtrl', ['$scope', 'Telemetry',
                 latitude: 33.87,
                 longitude: -118.36
             },
-            zoom: 11,
+            zoom: 13,
             options: {
                 panControl: false,
                 zoomControl: true,
@@ -64,6 +64,38 @@ controllers.controller('HomeCtrl', ['$scope', 'Telemetry',
                 repeat: '50px'
             }]
         };
+
+        // populate map and chart data
+        Telemetry.query({
+            // fields: 'data.latitude,data.longitude',
+            sort: '_date',
+            limit: 500,
+            where: {"mission":"53e4e46ed824e81700b9014e"}
+        }, function(data){
+            var msg;
+            for(var i = 0; i < data.items.length; i++) {
+                msg = data.items[i];
+
+                // map path
+                $scope.actual_path.path.push({
+                    latitude: msg.data.latitude,
+                    longitude: data.items[i].data.longitude
+                });
+            }
+
+            // recenter map
+            $scope.map.center = path_average($scope.actual_path.path);
+        });
+    }]);
+
+controllers.controller('GraphCtrl', ['$scope', 'Telemetry',
+    function ($scope, Telemetry) {
+        // get latest message
+        $scope.last_update = Telemetry.query({
+            limit: 1,
+            sort: '-_date',
+            where: {"mission":"53e4e46ed824e81700b9014e"}
+        });
 
         // chart data
         $scope.chart = {
@@ -122,28 +154,12 @@ controllers.controller('HomeCtrl', ['$scope', 'Telemetry',
             for(var i = 0; i < data.items.length; i++) {
                 msg = data.items[i];
 
-                // map path
-                $scope.actual_path.path.push({
-                    latitude: msg.data.latitude,
-                    longitude: data.items[i].data.longitude
-                });
-
                 // power data
                 var date = new Date(msg._date);
                 $scope.chart.series[0].data.push([date, msg.data.p_solar]);
                 $scope.chart.series[1].data.push([date, msg.data.p_load]);
             }
-
-            // recenter map
-            $scope.map.center = path_average($scope.actual_path.path);
         });
-    }]);
-
-controllers.controller('LayoutCtrl', ['$scope', '$location',
-    function ($scope, $location) {
-        $scope.isActive = function (navBarPath) {
-            return navBarPath === $location.path().split('/')[1];
-        };
     }]);
 
 controllers.controller('NominalCtrl', ['$scope', '$rootScope', '$timeout',

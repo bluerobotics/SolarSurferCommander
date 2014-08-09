@@ -38,6 +38,10 @@ npm run-script upload
 
 This project uses [semantic versioning](http://semver.org/).
 
+### v0.2.1 - 2014/08/09
+
+* Refactored "current mission" page into separate pages for better iOS use
+
 ### v0.2.0 - 2014/08/08
 
 * Refactored from SolarSurferPlanner to SolarSurferCommander

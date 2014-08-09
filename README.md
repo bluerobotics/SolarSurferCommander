@@ -31,6 +31,8 @@ The planner should now be available at [http://localhost:4444/](http://localhost
 You can also push the website to a static content host with:
 
 ```bash
+npm install
+npm run-script build
 npm run-script upload
 ```
 

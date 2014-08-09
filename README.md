@@ -28,13 +28,20 @@ npm start
 
 The planner should now be available at [http://localhost:4444/](http://localhost:4444/). The planner prints out most of useful information to the JavaScript console, so open that up to interact with the planner.
 
+You can also push the website to a static content host with:
+
+```bash
+npm run-script upload
+```
+
 ## Change History
 
 This project uses [semantic versioning](http://semver.org/).
 
-### v0.2.0 - tbd
+### v0.2.0 - 2014/08/08
 
 * Refactored from SolarSurferPlanner to SolarSurferCommander
+* Used for the Santa Monica Canyon Test Day 1
 
 ### v0.1.0 - 2014/06/25
 

@@ -25,9 +25,9 @@
         <![endif]-->
     </head>
 
-    <body>
+    <body ng-controller="LayoutCtrl">
         <!-- Start navbar -->
-        <div class="navbar navbar-default navbar-fixed-top" role="navigation" ng-cloak ng-controller="LayoutCtrl">
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation" ng-cloak>
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
@@ -44,9 +44,8 @@
                     <ul class="nav navbar-nav">
                         <li ng-class="{active:isActive('map')}"><a href="/map">Map</a></li>
                         <li ng-class="{active:isActive('graph')}"><a href="/graph">Graph</a></li>
-                        <li ng-class="{active:isActive('telemetry')}"><a href="/telemetry">Telemetry</a></li>
-                        <li ng-class="{active:isActive('commanding')}"><a href="/commanding">Commanding</a></li>
-                        <li ng-class="{active:isActive('settings')}"><a href="/settings">Settings</a></li>
+                        <li ng-class="{active:isActive('telemetry')}"><a href="/telemetry">Tlm</a></li>
+                        <li ng-class="{active:isActive('commanding')}"><a href="/commanding">Cmd</a></li>
                         <li class="dropdown" ng-class="{active:isActive('planning')}">
                             <a href="#" class="dropdown-toggle">Planning <b class="caret"></b></a>
                             <ul class="dropdown-menu">
@@ -60,15 +59,12 @@
                         </li>
                     </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="../navbar/">Default</a></li>
-                    </ul>
+                    <span class="label label-success pull-right hidden-xs last-updated">Updated <span am-time-ago="last_update._date"></span></span>
 
                 </div>
             </div>
         </div>
         <!-- End navbar -->
-
 
         <!-- Start content -->
         <div class="container" ng-cloak ng-view>
@@ -78,12 +74,14 @@
         <div id="footer">
             <div class="container text-muted">
                 <span class="pull-right">© 2014 BlueRobotics</span>
-                <span ng-cloak>
+                <span class="hidden-xs" ng-cloak>
                     <a href="https://github.com/bluerobotics/SolarSurferCommander" target="_blank" class="text-muted">v<span app-version></span></a>
                     |
                     <a href="/help">Help</a>
+                    |
+                    <a href="/settings"><span class="glyphicon glyphicon-cog"></span></a>
                 </span>
-            </div>
+                <span class="label label-success visible-xs-inline" ng-cloak>Updated <span am-time-ago="last_update._date"></span></span>
         </div>
 
         <!-- Placed at the end of the document so the pages load faster -->

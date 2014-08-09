@@ -4,15 +4,27 @@
 
 var controllers = angular.module('app.controllers', []);
 
-controllers.controller('LayoutCtrl', ['$scope', '$location',
-    function ($scope, $location) {
+controllers.controller('LayoutCtrl', ['$scope', '$location', 'LiveTelemetry', 'mission',
+    function ($scope, $location, LiveTelemetry, mission) {
         $scope.isActive = function (navBarPath) {
             return navBarPath === $location.path().split('/')[1];
         };
+
+        LiveTelemetry.init(mission);
+        $scope.last_update = {};
+
+        $scope.$on('telemetry-init', function(event, items) {
+            if(items.length > 0)
+                angular.extend($scope.last_update, items[0]);
+        });
+        $scope.$on('telemetry-update', function(event, items) {
+            if(items.length > 0)
+                angular.extend($scope.last_update, items[0]);
+        });
     }]);
 
-controllers.controller('MapCtrl', ['$scope', 'Telemetry',
-    function ($scope, Telemetry) {
+controllers.controller('MapCtrl', ['$scope', 'Telemetry', 'LiveTelemetry',
+    function ($scope, Telemetry, LiveTelemetry) {
         // map functions
         var path_average = function(path) {
             var latitude = 0, longitude = 0;
@@ -31,8 +43,12 @@ controllers.controller('MapCtrl', ['$scope', 'Telemetry',
         //         southwest: {latitude: 51.219053, longitude: 4.404418 }
         //     };
         // };
+        var init_surfer_marker = function() {
+            // if(map_instance !== undefined )
+        };
 
         // map config
+        var map_instance, surfer_marker, user_marker;
         $scope.map = {
             center: {
                 latitude: 33.87,
@@ -45,7 +61,38 @@ controllers.controller('MapCtrl', ['$scope', 'Telemetry',
                 mapTypeControl: true,
                 scaleControl: false,
                 streetViewControl: false,
-                overviewMapControl: false
+                overviewMapControl: false,
+                scrollWheel: false,
+                //mapTypeId: google.maps.MapTypeId.TERRAIN
+                // terrain type is cool but prevent maximum zoom
+            },
+            // events: {
+            //     tilesloaded: function (map) {
+            //         $scope.$apply(function () {
+            //             console.log('this is the map instance', map);
+
+
+            //             // build marker outside of angular-google-maps since RichMarker isn't supported yet
+            //             // var surfer_marker = new RichMarker({
+            //             //     // position: pointToMoveTo,
+            //             //     map: map,
+            //             //     content: '<div class="pulse2">test</div>',
+            //             // });
+            //         });
+            //     }
+            // }
+        };
+        $scope.marker = {
+            id: 0,
+            coords: {
+            },
+            options: { draggable: false },
+            events: {
+                // dragend: function (marker, eventName, args) {
+                //     $log.log('marker dragend');
+                //     $log.log(marker.getPosition().lat());
+                //     $log.log(marker.getPosition().lng());
+                // }
             }
         };
 
@@ -54,11 +101,12 @@ controllers.controller('MapCtrl', ['$scope', 'Telemetry',
             path: [],
             stroke: {
                 color: '#FF0000',
-                weight: 3
+                opacity: 0.5,
+                weight: 2
             },
             icons: [{
                 icon: {
-                    path: google.maps.SymbolPath.FORWARD_OPEN_ARROW
+                    path: google.maps.SymbolPath.BACKWARD_OPEN_ARROW
                 },
                 offset: '25px',
                 repeat: '50px'
@@ -66,25 +114,40 @@ controllers.controller('MapCtrl', ['$scope', 'Telemetry',
         };
 
         // populate map and chart data
-        Telemetry.query({
-            // fields: 'data.latitude,data.longitude',
-            sort: '_date',
-            limit: 500,
-            where: {"mission":"53e4e46ed824e81700b9014e"}
-        }, function(data){
-            var msg;
-            for(var i = 0; i < data.items.length; i++) {
-                msg = data.items[i];
-
-                // map path
+        $scope.$on('telemetry-init', function(event, items) {
+            // process line and marker positions
+            for(var i = 0; i < items.length; i++) {
                 $scope.actual_path.path.push({
-                    latitude: msg.data.latitude,
-                    longitude: data.items[i].data.longitude
+                    id: items[i]._id,
+                    latitude: items[i].data.latitude,
+                    longitude: items[i].data.longitude,
+                    icon: '/img/black-marker.png'
                 });
             }
 
+            // process current marker position
+            if(items.length > 0)
+                $scope.marker.coords = $scope.actual_path.path[0];
+
             // recenter map
-            $scope.map.center = path_average($scope.actual_path.path);
+            // $scope.map.center = path_average($scope.actual_path.path);
+        });
+        $scope.$on('telemetry-update', function(event, items) {
+            // process line and marker positions
+            var new_paths = [];
+            for(var i = 0; i < items.length; i++) {
+                new_paths.push({
+                    id: items[i]._id,
+                    latitude: items[i].data.latitude,
+                    longitude: items[i].data.longitude,
+                    icon: '/img/black-marker.png'
+                });
+            }
+            $scope.actual_path.path = new_paths.concat($scope.actual_path.path);
+
+            // process current marker position
+            if(items.length > 0)
+                angular.extend($scope.marker.coords, $scope.actual_path.path[0]);
         });
     }]);
 

@@ -19,7 +19,9 @@ var app = angular.module('app', [
     'app.controllers'
 ]);
 
-app.value('version', '0.2.0');
+app.value('version', '0.3.0');
+app.value('mission', '53e4e46ed824e81700b9014e');
+app.value('pollrate', 10000); // milliseconds
 
 app.config(['$routeProvider', '$httpProvider', '$locationProvider',
         function($routeProvider, $httpProvider, $locationProvider) {

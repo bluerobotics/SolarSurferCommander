@@ -26,6 +26,10 @@ body {
     padding: 15px 0;
 }
 
+#footer .glyphicon-cog {
+    top: 3px;
+}
+
 .navbar-brand {
     padding-top: 9px;
     
@@ -34,14 +38,26 @@ body {
     }
 }
 
+.navbar .last-updated {
+    margin-top: 18px;
+}
+
+/* Shared snippits
+-------------------------------------------------- */
+
+#search.ng-hide, #search[ng-cloak],
+[ng\:cloak], [ng-cloak], .ng-cloak {
+    display: none !important;
+}
+
 /* Map page
 -------------------------------------------------- */
 
 .page-map {
     .angular-google-map {
         position: fixed;
-        top: 50px;
-        bottom: 50px;
+        top: @navbar-height;
+        bottom: @footer-height;
         left: 0;
         right: 0;
     }

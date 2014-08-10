@@ -47,6 +47,8 @@ This project uses [semantic versioning](http://semver.org/).
 * build-your-own graphs / plots
 * overlay planned waypoints by parsing command messages
 * mission select
+* Use HTML5 localstorage to speed up subsequent data access
+* fix SolarSurfer path bug - connects seemingly random points together
 
 ### v0.2.1 - 2014/08/09
 

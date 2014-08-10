@@ -220,7 +220,7 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
                 title: {
                     text: 'Heading (degrees)',
                     style: {
-                        color: Highcharts.getOptions().colors[2]
+                        color: Highcharts.getOptions().colors[1]
                     }
                 },
                 opposite: true
@@ -257,7 +257,7 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
                 title: {
                     text: 'Command Counts',
                     style: {
-                        color: Highcharts.getOptions().colors[2]
+                        color: Highcharts.getOptions().colors[1]
                     }
                 },
                 opposite: true

@@ -177,18 +177,18 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
                 title: {
                     text: 'Voltage (V)',
                     style: {
-                        color: Highcharts.getOptions().colors[2]
+                        color: Highcharts.getOptions().colors[1]
                     }
                 },
                 opposite: true
             }],
             series: [{
-                name: 'Solar Power (W)',
-                marker: {
-                    enabled: true
-                },
-                data: []
-            },{
+            //     name: 'Solar Power (W)',
+            //     marker: {
+            //         enabled: true
+            //     },
+            //     data: []
+            // },{
                 name: 'Load Power (W)',
                 marker: {
                     enabled: true
@@ -283,9 +283,9 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
                 var date = new Date(items[i]._date).getTime();
 
                 // power chart
-                $scope.power_chart.series[0].data.push([date, items[i].data.p_solar]);
-                $scope.power_chart.series[1].data.push([date, items[i].data.p_load]);
-                $scope.power_chart.series[2].data.push([date, items[i].data.v_load]);
+                // $scope.power_chart.series[0].data.push([date, items[i].data.p_solar]);
+                $scope.power_chart.series[0].data.push([date, items[i].data.p_load]);
+                $scope.power_chart.series[1].data.push([date, items[i].data.v_load]);
 
                 // nav chart
                 $scope.nav_chart.series[0].data.push([date, items[i].data.currentWaypointIndex]);

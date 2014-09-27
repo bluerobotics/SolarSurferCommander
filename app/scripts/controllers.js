@@ -278,9 +278,11 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
             }]
         });
 
+        var timezone_offset =  (new Date()).getTimezoneOffset() * 60000;
+
         var add_data = function(items) {
             for(var i = items.length - 1; i >= 0; i--) {
-                var date = new Date(items[i]._date).getTime();
+                var date = new Date(items[i]._date).getTime() - timezone_offset;
 
                 // power chart
                 // $scope.power_chart.series[0].data.push([date, items[i].data.p_solar]);

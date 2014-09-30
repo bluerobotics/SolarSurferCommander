@@ -40,15 +40,10 @@ npm run-script upload
 
 This project uses [semantic versioning](http://semver.org/).
 
-### future - future
+### v0.2.2 - 2014/09/30
 
-* commanding
-* marker pop-up with date, gps coords, speed, current waypoint #
-* build-your-own graphs / plots
-* overlay planned waypoints by parsing command messages
-* mission select
-* Use HTML5 localstorage to speed up subsequent data access
-* fix SolarSurfer path bug - connects seemingly random points together
+* Converted graph timestamps to the browser's local timezone
+* Added velocity calculations to the power graph
 
 ### v0.2.1 - 2014/08/09
 
@@ -76,6 +71,16 @@ This project uses [semantic versioning](http://semver.org/).
 
 ## Todo
 
+* commanding
+* marker pop-up with date, gps coords, speed, current waypoint #
+* build-your-own graphs / plots
+* overlay planned waypoints by parsing command messages
+* create a solar energy calculator from the [ITACA equations](http://www.itacanet.org/the-sun-as-a-source-of-energy/) and overlay maximum solar energy / time
+  * create this as a separate repository for browser and node
+* auto select a position on the map when click a point in a graph
+* mission select
+* Use HTML5 localstorage to speed up subsequent data access
+* fix SolarSurfer path bug - connects seemingly random points together
 * brunch doesn't copy .htaccess to _public
 
 ## Screenshot

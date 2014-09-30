@@ -181,6 +181,15 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
                     }
                 },
                 opposite: true
+            },{
+                gridLineWidth: 0,
+                title: {
+                    text: 'Velocity (m/s)',
+                    style: {
+                        color: Highcharts.getOptions().colors[2]
+                    }
+                },
+                opposite: false
             }],
             series: [{
             //     name: 'Solar Power (W)',
@@ -197,6 +206,13 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
             },{
                 yAxis: 1,
                 name: 'Load Voltage (V)',
+                marker: {
+                    enabled: true
+                },
+                data: []
+            },{
+                yAxis: 2,
+                name: 'Velocity (m/s)',
                 marker: {
                     enabled: true
                 },
@@ -278,24 +294,23 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
             }]
         });
 
-        var timezone_offset =  (new Date()).getTimezoneOffset() * 60000;
-
         var add_data = function(items) {
-            for(var i = items.length - 1; i >= 0; i--) {
-                var date = new Date(items[i]._date).getTime() - timezone_offset;
+            for(var i = 0; i < items.length; i++) {
+                var time = items[i].derived.time; // milliseconds since epoch
 
                 // power chart
-                // $scope.power_chart.series[0].data.push([date, items[i].data.p_solar]);
-                $scope.power_chart.series[0].data.push([date, items[i].data.p_load]);
-                $scope.power_chart.series[1].data.push([date, items[i].data.v_load]);
+                // $scope.power_chart.series[0].data.push([time, items[i].data.p_solar]);
+                $scope.power_chart.series[0].data.push([time, items[i].data.p_load]);
+                $scope.power_chart.series[1].data.push([time, items[i].data.v_load]);
+                $scope.power_chart.series[2].data.push([time, items[i].derived.v]);
 
                 // nav chart
-                $scope.nav_chart.series[0].data.push([date, items[i].data.currentWaypointIndex]);
-                $scope.nav_chart.series[1].data.push([date, items[i].data.heading]);
+                $scope.nav_chart.series[0].data.push([time, items[i].data.currentWaypointIndex]);
+                $scope.nav_chart.series[1].data.push([time, items[i].data.heading]);
 
                 // telem chart
-                $scope.telem_chart.series[0].data.push([date, items[i].data.telemetryCount]);
-                $scope.telem_chart.series[1].data.push([date, items[i].data.commandCount]);
+                $scope.telem_chart.series[0].data.push([time, items[i].data.telemetryCount]);
+                $scope.telem_chart.series[1].data.push([time, items[i].data.commandCount]);
             }
         };
 
@@ -314,12 +329,12 @@ controllers.controller('TelemetryCtrl', ['$scope', 'LiveTelemetry',
         $scope.data = {};
         var items = LiveTelemetry.items();
         if(items.length > 0)
-            angular.extend($scope.data, items[0]);
+            angular.extend($scope.data, items[items.length-1]);
 
         // respond to LiveTelemetry updates
         $scope.$on('telemetry-update', function(event, items) {
             if(items.length > 0)
-                angular.extend($scope.data, items[0]);
+                angular.extend($scope.data, items[items.length-1]);
         });
     }]);
 

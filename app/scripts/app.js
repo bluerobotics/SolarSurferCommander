@@ -20,7 +20,7 @@ var app = angular.module('app', [
     'app.controllers'
 ]);
 
-app.value('version', '0.2.1');
+app.value('version', '0.2.2');
 app.value('mission', '53e4e46ed824e81700b9014e');
 app.value('pollrate', 10000); // milliseconds
 

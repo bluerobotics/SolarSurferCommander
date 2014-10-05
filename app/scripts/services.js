@@ -50,6 +50,12 @@ services.factory('Vehicle', ['$resource',
       {
         'query': {
           method: 'GET'
+        },
+        'create': {
+          method: 'POST'
+        },
+        'update': {
+          method: 'PUT'
         }
       }
     );
@@ -64,6 +70,12 @@ services.factory('Mission', ['$resource',
       {
         'query': {
           method: 'GET'
+        },
+        'create': {
+          method: 'POST'
+        },
+        'update': {
+          method: 'PUT'
         }
       }
     );

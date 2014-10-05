@@ -56,21 +56,24 @@
                 <tr>
                   <th>Name</th>
                   <th>Current Mission</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
                 <tr ng-repeat="mission in missions.items" ng-if="mission.vehicle == vehicle._id">
                   <td><input type="text" class="form-control" placeholder="Name" ng-model="mission.name"></td>
                   <td><input type="radio" ng-model="vehicle.current_mission" ng-value="mission._id"></td>
+                  <td><button class="btn btn-primary" ng-click="saveMission(mission)">Save</button></td>
                 </tr>
               </tbody>
             </table>
+            <button class="btn btn-default pull-right" ng-click="addMission(vehicle)">Add Mission</button>
 
           </div>
         </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-default" ng-class="{disabled: true}">Save</button>
+            <button class="btn btn-primary" ng-click="saveVehicle(vehicle)">Save Vehicle</button>
           </div>
         </div>
       </form>

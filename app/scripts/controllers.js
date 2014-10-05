@@ -499,7 +499,24 @@ controllers.controller('SettingsCtrl', ['$scope', '$rootScope', 'Vehicle', 'Miss
     $scope.vehicles = Vehicle.query();
     $scope.missions = Mission.query();
     $scope.settings = Settings;
-    // $scope.missions.$promise.then(function(data){console.log(data);});
+    $scope.addMission = function(vehicle){
+      var m = new Mission();
+      m.vehicle = vehicle._id;
+      $scope.missions.items.push(m);
+    };
+    $scope.saveMission = function(m) {
+      if(m._id === undefined) {
+        // must be new, let's POST
+        m.$create();
+      }
+      else {
+        // must be old, let's PUT
+        Mission.update({id: m._id}, m);
+      }
+    };
+    $scope.saveVehicle = function(v) {
+      Vehicle.update({id: v._id}, v);
+    };
   }]);
 
 controllers.controller('StaticCtrl', ['$scope', '$rootScope',

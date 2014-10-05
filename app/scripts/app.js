@@ -6,6 +6,7 @@
 var app = angular.module('app', [
     // angular modules
     'ngRoute',
+    'ngCookies',
     'ngResource',
     // third-party modules
     'ui.bootstrap',
@@ -52,7 +53,7 @@ app.config(['$routeProvider', '$httpProvider', '$locationProvider',
     });
     $routeProvider.when('/settings', {
         templateUrl: 'templates/settings.html',
-        controller: 'StaticCtrl',
+        controller: 'SettingsCtrl',
         reloadOnSearch: false
     });
     $routeProvider.when('/planning/nominal', {
@@ -63,11 +64,6 @@ app.config(['$routeProvider', '$httpProvider', '$locationProvider',
     $routeProvider.when('/planning/:id', {
         templateUrl: 'templates/trade.html',
         controller: 'TradeCtrl',
-        reloadOnSearch: false
-    });
-    $routeProvider.when('/help', {
-        templateUrl: 'templates/help.html',
-        controller: 'StaticCtrl',
         reloadOnSearch: false
     });
     $routeProvider.otherwise({redirectTo: '/map'});

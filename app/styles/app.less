@@ -8,42 +8,42 @@
 @body-content-padding: 40px;
 
 html {
-    position: relative;
-    min-height: 100%;
+  position: relative;
+  min-height: 100%;
 }
 
 body {
-    padding-top: @navbar-height + @body-content-padding;
-    margin-bottom: @footer-height + 20px;
+  padding-top: @navbar-height + @body-content-padding;
+  margin-bottom: @footer-height + 20px;
 }
 
 #footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: @footer-height;
-    background-color: @panel-default-heading-bg;
-    padding: 15px 0;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: @footer-height;
+  background-color: @panel-default-heading-bg;
+  padding: 15px 0;
 }
 
 #footer .glyphicon-cog {
-    top: 3px;
+  top: 3px;
 }
 
 .navbar-brand {
-    padding-top: 9px;
-    
-    img {
-        height: 35px;
-    }
+  padding-top: 9px;
+  
+  img {
+    height: 35px;
+  }
 }
 
 .navbar .last-updated {
-    margin-top: 18px;
+  margin-top: 18px;
 }
 
 .last-updated .glyphicon {
-    margin-right: 2px;
+  margin-right: 2px;
 }
 
 /* Shared snippits
@@ -51,24 +51,24 @@ body {
 
 #search.ng-hide, #search[ng-cloak],
 [ng\:cloak], [ng-cloak], .ng-cloak {
-    display: none !important;
+  display: none !important;
 }
 
 /* Map page
 -------------------------------------------------- */
 
 .page-map {
-    .angular-google-map {
-        position: fixed;
-        top: @navbar-height;
-        bottom: @footer-height;
-        left: 0;
-        right: 0;
-    }
+  .angular-google-map {
+    position: fixed;
+    top: @navbar-height;
+    bottom: @footer-height;
+    left: 0;
+    right: 0;
+  }
 
-    .angular-google-map-container {
-        height: 100%;
-    }
+  .angular-google-map-container {
+    height: 100%;
+  }
 }
 
 /* Graph page
@@ -81,23 +81,32 @@ body {
 -------------------------------------------------- */
 
 .directive-result {
-    .angular-google-map-container { height: 400px; }
+  .angular-google-map-container { height: 400px; }
 
-    google-map div {
-        border-radius: @panel-border-radius;
-    }
+  google-map div {
+    border-radius: @panel-border-radius;
+  }
 
-    .highcharts-container {
-        margin-top: @body-content-padding;
-    }
+  .highcharts-container {
+    margin-top: @body-content-padding;
+  }
 
-    .panel-heading {
-        cursor: pointer;
-    }
+  .panel-heading {
+    cursor: pointer;
+  }
 
-    .result-complete {
-        float: right;
-        color: @brand-success;
-    }
+  .result-complete {
+    float: right;
+    color: @brand-success;
+  }
 }
 
+/* Settings page
+-------------------------------------------------- */
+
+.page-settings {
+  table td:nth-child(2), table th:nth-child(2) {
+    width: 200px;
+    text-align: center;
+  }
+}

@@ -22,7 +22,7 @@ services.factory('Settings', ['$rootScope', '$q', '$cookies', 'Mission',
       // this is the first visit, let's automatically grab the latest mission
       Mission.query({
         limit: 1,
-        //sort: '-_date'
+        sort: '-_date'
       }).$promise.then(function(data){
         console.log('Initializing app with latest mission', data.items[0]._id);
         settings.mission = data.items[0]._id;

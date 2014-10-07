@@ -55,6 +55,7 @@
               <thead>
                 <tr>
                   <th>Name</th>
+                  <th>Date Created</th>
                   <th>Current Mission</th>
                   <th></th>
                 </tr>
@@ -62,6 +63,7 @@
               <tbody>
                 <tr ng-repeat="mission in missions.items" ng-if="mission.vehicle == vehicle._id">
                   <td><input type="text" class="form-control" placeholder="Name" ng-model="mission.name"></td>
+                  <td>{{mission._date}}</td>
                   <td><input type="radio" ng-model="vehicle.current_mission" ng-value="mission._id"></td>
                   <td><button class="btn btn-primary" ng-click="saveMission(mission)">Save</button></td>
                 </tr>

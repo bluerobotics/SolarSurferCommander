@@ -40,6 +40,16 @@ npm run-script upload
 
 This project uses [semantic versioning](http://semver.org/).
 
+### v0.2.4 - future
+
+* Relocated shared components to SolarSurferAngularComponents
+
+### v0.2.3 - future
+
+* Can now command through the GUI
+* Can now configure vehicles and missions
+* Can now select a different mission to view in the GUI
+
 ### v0.2.2 - 2014/09/30
 
 * Converted graph timestamps to the browser's local timezone
@@ -71,18 +81,16 @@ This project uses [semantic versioning](http://semver.org/).
 
 ## Todo
 
-* commanding
 * marker pop-up with date, gps coords, speed, current waypoint #
 * build-your-own graphs / plots
 * overlay planned waypoints by parsing command messages
 * create a solar energy calculator from the [ITACA equations](http://www.itacanet.org/the-sun-as-a-source-of-energy/) and overlay maximum solar energy / time
   * create this as a separate repository for browser and node
 * auto select a position on the map when click a point in a graph
-* mission select
 * Use HTML5 localstorage to speed up subsequent data access
 * fix SolarSurfer path bug - connects seemingly random points together
 * brunch doesn't copy .htaccess to _public
 
 ## Screenshot
 
-![Screenshot](screenshot.png)
+![Screenshot](screenshots/screenshot-v0.2.1.png)

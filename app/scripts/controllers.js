@@ -497,7 +497,7 @@ controllers.controller('TradeCtrl', ['$scope', '$routeParams',
 controllers.controller('SettingsCtrl', ['$scope', '$rootScope', 'Vehicle', 'Mission', 'Settings',
   function ($scope, $rootScope, Vehicle, Mission, Settings) {
     $scope.vehicles = Vehicle.query();
-    $scope.missions = Mission.query();
+    $scope.missions = Mission.query({sort: '-_date'});
     $scope.settings = Settings;
     $scope.addMission = function(vehicle){
       var m = new Mission();
@@ -507,15 +507,15 @@ controllers.controller('SettingsCtrl', ['$scope', '$rootScope', 'Vehicle', 'Miss
     $scope.saveMission = function(m) {
       if(m._id === undefined) {
         // must be new, let's POST
-        m.$create();
+        m.$create({token: Settings.token});
       }
       else {
         // must be old, let's PUT
-        Mission.update({id: m._id}, m);
+        Mission.update({id: m._id, token: Settings.token}, m);
       }
     };
     $scope.saveVehicle = function(v) {
-      Vehicle.update({id: v._id}, v);
+      Vehicle.update({id: v._id, token: Settings.token}, v);
     };
   }]);
 

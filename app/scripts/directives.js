@@ -112,8 +112,9 @@ directives.directive('result', [
                     });
 
                     // build charts series
+                    var timezone_offset =  (new Date()).getTimezoneOffset() * 60000;
                     var dx_series = {
-                        name: 'Distance from Manhattan Beach (km)',
+                        name: 'Total Distance Traveled (km)',
                         marker: {
                             enabled: false
                         },
@@ -144,20 +145,21 @@ directives.directive('result', [
                         data: []
                     };
                     angular.forEach(planner.data, function(step){
+                        var d = step.date.toDate().getTime() + timezone_offset;
                         dx_series.data.push([
-                            step.date.toDate(),
+                            d,
                             step.dx_home.to('km').scalar
                         ]);
                         pthruster_series.data.push([
-                            step.date.toDate(),
+                            d,
                             step.p_thruster.to('W').scalar
                         ]);
                         waypoint_series.data.push([
-                            step.date.toDate(),
+                            d,
                             step.route_index
                         ]);
                         velocity_series.data.push([
-                            step.date.toDate(),
+                            d,
                             step.v.mag.to('m/s').scalar
                         ]);
                     });

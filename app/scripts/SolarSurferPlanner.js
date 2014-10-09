@@ -12,12 +12,12 @@ function Planner(config) {
 // defaults
 Planner.prototype.default_config = {
   debug: true,
-  date_start: moment(),
+  date_start: moment('2014-10-14 10:00:00.000+07:00'),
   date_delta: moment.duration(0.25, 'hour'),
   date_max: moment().add(moment.duration(6, 'months')),
   // Monterey route:
   route: [
-    [33.958454 , -118.467979],
+    [33.963010 , -118.496475],
     [33.788279 , -120.289307],
     [34.270836 , -121.794434],
     [35.728677 , -123.079834],
@@ -148,7 +148,7 @@ Planner.prototype.calculateRouteIndex = function(data, previous) {
 Planner.prototype.calculateSolar = function(data, previous) {
   // calculate the power output
   // TODO: actually use sun angle at the time of the year
-  var sun_factor = (Math.sin((5/6)*(data.date.hours()-7)/Math.PI)*0.9+0.1);
+  var sun_factor = (Math.sin((5/6)*(data.date.hours()+7)/Math.PI)*0.9+0.1);
   if ( sun_factor < 0 ) {
     sun_factor = 0;
   }

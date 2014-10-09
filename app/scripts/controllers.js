@@ -425,7 +425,7 @@ controllers.controller('TradeCtrl', ['$scope', '$routeParams',
         $scope.configs.push({
           title: 'each thruster set to ' + i + 'W',
           planner: new Planner({
-            p_thruster: new Qty(i+'W')
+            p_thruster: new Qty(2*i+' W')
           })
         });
       }

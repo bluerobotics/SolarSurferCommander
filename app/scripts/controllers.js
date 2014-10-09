@@ -365,8 +365,8 @@ controllers.controller('TradeCtrl', ['$scope', '$routeParams',
     $scope.chart = {
       options: {
         chart: {
-          type: 'scatter',
-          zoomType: 'xy'
+          type: 'line',
+          zoomType: 'x'
         },
         tooltip: {
             shared: true
@@ -427,7 +427,7 @@ controllers.controller('TradeCtrl', ['$scope', '$routeParams',
     $scope.configs = [];
 
     if($routeParams.id == 'throttlesetting') {
-      for(var i = 10; i <= 80; i = i + 10) {
+      for(var i = 20; i <= 80; i = i + 10) {
         $scope.configs.push({
           title: 'each thruster set to ' + i + 'W',
           planner: new Planner({

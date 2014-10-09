@@ -69,10 +69,10 @@ directives.directive('result', [
                     // map config
                     $scope.map = {
                         center: {
-                            latitude: 26.0925675,
-                            longitude: -138.2964353
+                            latitude: 35.173808,
+                            longitude: -121
                         },
-                        zoom: 4,
+                        zoom: 7,
                         options: {
                             panControl: false,
                             zoomControl: true,

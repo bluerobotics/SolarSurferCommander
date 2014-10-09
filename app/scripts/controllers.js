@@ -363,10 +363,16 @@ controllers.controller('TradeCtrl', ['$scope', '$routeParams',
 
     // construct a chart from the trade
     $scope.chart = {
-      config: {
+      options: {
         chart: {
           type: 'scatter',
           zoomType: 'xy'
+        },
+        tooltip: {
+            shared: true
+        },
+        exporting: {
+            enabled: false
         }
       },
       xAxis: {
@@ -421,10 +427,11 @@ controllers.controller('TradeCtrl', ['$scope', '$routeParams',
     $scope.configs = [];
 
     if($routeParams.id == 'throttlesetting') {
-      for(var i = 20; i <= 120; i = i + 20) {
+      for(var i = 10; i <= 80; i = i + 10) {
         $scope.configs.push({
           title: 'each thruster set to ' + i + 'W',
           planner: new Planner({
+            p_solar_max: new Qty((2*i+4)+' W'),
             p_thruster: new Qty(2*i+' W')
           })
         });

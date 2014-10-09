@@ -13,7 +13,7 @@ function Planner(config) {
 Planner.prototype.default_config = {
   debug: true,
   date_start: moment('2014-10-14 10:00:00.000+07:00'),
-  date_delta: moment.duration(0.25, 'hour'),
+  date_delta: moment.duration(1, 'hour'),
   date_max: moment().add(moment.duration(6, 'months')),
   // Monterey route:
   route: [
@@ -27,6 +27,7 @@ Planner.prototype.default_config = {
   // loc_start: new google.maps.LatLng(33.8823163, -118.4123013),
   // loc_end: new google.maps.LatLng(19.1205301, -155.5010251),
   nav_radius: new Qty('1 km'),
+  p_solar_max: new Qty('74 W'), // September, Marina del Rey
   p_thruster: new Qty('120 W'),
   p_avionics: new Qty('4 W'),
   sea_mult: new Qty('1')
@@ -59,19 +60,20 @@ Planner.prototype.start = function() {
   this.data = [];
 
   // prep GPS coordinates
-  for(var i = 0; i < this.config.route.length; i++) {
-    this.config.route[i] = new google.maps.LatLng(
-      this.config.route[i][0],
-      this.config.route[i][1]);
+  if(this.config.route[0].constructor.name == 'Array') {
+    for(var i = 0; i < this.config.route.length; i++) {
+      this.config.route[i] = new google.maps.LatLng(
+        this.config.route[i][0],
+        this.config.route[i][1]);
+    }
   }
-  // this.config.loc_start = this.config.route[0];
-  // this.config.loc_end = this.config.route[this.config.route.length - 1];
 
   // state vars
   this.dt = new Qty(this.config.date_delta.asMilliseconds()+'ms');
-  var step, previous = {
+  var step;
+  var previous = {
     step: 0,
-    date: this.config.date_start.clone(),
+    date: this.config.date_start.clone().subtract(this.config.date_delta),
     loc: this.config.route[0],
     route_index: 1, // go to the coordinate after the start
     energy: new Qty('0 J'),
@@ -106,9 +108,9 @@ Planner.prototype.calculateStep = function(previous) {
   // build on the previous step
   data.step = previous.step + 1;
   data.date = previous.date.clone().add(this.config.date_delta);
+  this.calculateRouteIndex(data, previous);
 
   // do the actual sim logic
-  this.calculateRouteIndex(data, previous);
   if(data.route_index >= 0) {
     this.calculateSolar(data, previous);
     this.calculatePowerAvailable(data, previous);
@@ -152,7 +154,7 @@ Planner.prototype.calculateSolar = function(data, previous) {
   if ( sun_factor < 0 ) {
     sun_factor = 0;
   }
-  data.p_solar = new Qty(sun_factor*74+'W'); // September, Marina del Rey
+  data.p_solar = this.config.p_solar_max.mul(sun_factor);
   data.v_solar = new Qty(sun_factor*14+'V'); // This is not accurate at all.
 };
 

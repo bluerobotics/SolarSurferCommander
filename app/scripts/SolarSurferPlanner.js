@@ -150,10 +150,16 @@ Planner.prototype.calculateRouteIndex = function(data, previous) {
 Planner.prototype.calculateSolar = function(data, previous) {
   // calculate the power output
   // TODO: actually use sun angle at the time of the year
-  var sun_factor = (Math.sin((5/6)*(data.date.hours()+7)/Math.PI)*0.9+0.1);
-  if ( sun_factor < 0 ) {
-    sun_factor = 0;
-  }
+  var h = data.date.hours()+7;
+  var sunrise = 7;
+  var transit = 11.5;
+  var sun_factor;
+  if(h < 7 || h > (sunrise + transit)) sun_factor = 0;
+  else sun_factor = Math.sin((h - sunrise) / transit * Math.PI);
+  // var sun_factor = (Math.sin((5/6)*()/Math.PI)*0.9+0.1);
+  // if ( sun_factor < 0 ) {
+  //   sun_factor = 0;
+  // }
   data.p_solar = this.config.p_solar_max.mul(sun_factor);
   data.v_solar = new Qty(sun_factor*14+'V'); // This is not accurate at all.
 };
@@ -192,14 +198,15 @@ Planner.prototype.calculateThrusterPower = function(data, previous) {
 // calculate new position at the end of the step
 Planner.prototype.calculateMovement = function(data, previous) {
   // stormy seas?
-  var v_current;
-  if(Math.random() > 0.9) {
-    v_current = {
-      mag: data.sea_current.mag.mul(4),
-      dir: data.sea_current.dir
-    };
-  }
-  else v_current = data.sea_current;
+  // var v_current;
+  // if(Math.random() > 0.9) {
+  //   v_current = {
+  //     mag: data.sea_current.mag.mul(4),
+  //     dir: data.sea_current.dir
+  //   };
+  // }
+  // else v_current = data.sea_current;
+  var v_current = data.sea_current;
 
   // force balance
   // var f = data.thrust - data.drag;
@@ -207,9 +214,9 @@ Planner.prototype.calculateMovement = function(data, previous) {
   // For now we'll assume that 1 m/s is our max speed at max power and the speed
   // drops off linearly with power. This isn't really true because drag is proportional
   // to the square of speed and thrust. It'll be close though.
-  // Ocean Test No. 3 / Marina del Rey says 1 m/s max at 70W
+  // Ocean Test No. 3 / Marina del Rey says 0.8 m/s max at 70W
   var v_thrust = {
-    mag: data.p_thruster.div(new Qty('70.0 W')).mul(new Qty('1 m/s')),
+    mag: data.p_thruster.div(new Qty('70.0 W')).mul(new Qty('0.82 m/s')),
     dir: new Qty(google.maps.geometry.spherical.computeHeading(
       previous.loc,
       this.config.route[data.route_index]

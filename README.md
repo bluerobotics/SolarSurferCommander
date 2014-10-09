@@ -42,13 +42,14 @@ This project uses [semantic versioning](http://semver.org/).
 
 ### v0.2.4 - future
 
+* Can now command through the GUI
 * Relocated shared components to SolarSurferAngularComponents
 
-### v0.2.3 - future
+### v0.2.3 - 2014/10/09
 
-* Can now command through the GUI
 * Can now configure vehicles and missions
 * Can now select a different mission to view in the GUI
+* Updated mission planner for Monterey / California coastline trip
 
 ### v0.2.2 - 2014/09/30
 

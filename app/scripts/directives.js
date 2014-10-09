@@ -85,17 +85,17 @@ directives.directive('result', [
 
                     // construct the ideal path
                     $scope.ideal_path = {
-                        path: [{
-                            latitude: planner.config.loc_start.lat(),
-                            longitude: planner.config.loc_start.lng()
-                        }, {
-                            latitude: planner.config.loc_end.lat(),
-                            longitude: planner.config.loc_end.lng()
-                        }],
+                        path: [],
                         // stroke: {
                         //     color: '#2C99CE'
                         // }
                     };
+                    for(var i = 0; i < planner.config.route.length; i++) {
+                        $scope.ideal_path.path.push({
+                            latitude: planner.config.route[i].lat(),
+                            longitude: planner.config.route[i].lng()
+                        });
+                    }
 
                     // construct a path from the sim
                     $scope.sim_path = {
@@ -119,33 +119,61 @@ directives.directive('result', [
                         },
                         data: []
                     };
-                    angular.forEach(planner.data, function(step){
-                        dx_series.data.push([
-                            step.date.toDate(),
-                            step.dx_home.to('km').scalar
-                        ]);
-                    });
-                    var psolar_series = {
-                        name: 'Solar Power (W)',
+                    var pthruster_series = {
+                        name: 'Thruster Power (W)',
                         yAxis: 1,
                         marker: {
                             enabled: false
                         },
                         data: []
                     };
+                    var waypoint_series = {
+                        name: 'Waypoint Index',
+                        yAxis: 2,
+                        marker: {
+                            enabled: false
+                        },
+                        data: []
+                    };
+                    var velocity_series = {
+                        name: 'Velocity (m/s)',
+                        yAxis: 3,
+                        marker: {
+                            enabled: false
+                        },
+                        data: []
+                    };
                     angular.forEach(planner.data, function(step){
-                        psolar_series.data.push([
+                        dx_series.data.push([
                             step.date.toDate(),
-                            step.p_solar.to('W').scalar
+                            step.dx_home.to('km').scalar
+                        ]);
+                        pthruster_series.data.push([
+                            step.date.toDate(),
+                            step.p_thruster.to('W').scalar
+                        ]);
+                        waypoint_series.data.push([
+                            step.date.toDate(),
+                            step.route_index
+                        ]);
+                        velocity_series.data.push([
+                            step.date.toDate(),
+                            step.v.mag.to('m/s').scalar
                         ]);
                     });
 
                     // construct a chart from the sim
                     $scope.chart = {
-                        config: {
+                        options: {
                             chart: {
                                 type: 'line',
                                 zoomType: 'x'
+                            },
+                            tooltip: {
+                                shared: true
+                            },
+                            exporting: {
+                                enabled: false
                             }
                         },
                         xAxis: {
@@ -169,14 +197,31 @@ directives.directive('result', [
                         }, { // Secondary yAxis
                             gridLineWidth: 0,
                             title: {
-                                text: 'Solar Power (W)',
+                                text: 'Thruster Power (W)',
                                 style: {
                                     color: Highcharts.getOptions().colors[1]
                                 }
                             },
                             opposite: true
+                        }, {
+                            gridLineWidth: 0,
+                            title: {
+                                text: 'Waypoint Index',
+                                style: {
+                                    color: Highcharts.getOptions().colors[2]
+                                }
+                            }
+                        }, {
+                            gridLineWidth: 0,
+                            title: {
+                                text: 'Velocity (m/s)',
+                                style: {
+                                    color: Highcharts.getOptions().colors[3]
+                                }
+                            },
+                            opposite: true
                         }],
-                        series: [dx_series, psolar_series],
+                        series: [dx_series, pthruster_series, waypoint_series, velocity_series],
                         title: {
                             text: ''
                         },

@@ -463,6 +463,23 @@ controllers.controller('TradeCtrl', ['$scope', '$routeParams',
           })
         });
       }
+
+      $scope.chart_callback = function() {
+        var data = [], planner;
+        for(var i = 0; i < $scope.configs.length; i++) {
+          planner = $scope.configs[i].planner;
+          data.push([
+            planner.data[0].sea_current.mag.scalar,
+            numOfDays(planner)
+          ]);
+        }
+        $scope.chart.xAxis.title.text = 'Ocean Current (m/s)';
+        $scope.chart.yAxis.title.text = 'days at sea';
+        $scope.chart.series = [{
+          name: 'Ocean Current (m/s)',
+          data: data
+        }];
+      };
     }
     else if($routeParams.id == 'simresolution') {
       $scope.configs = [{

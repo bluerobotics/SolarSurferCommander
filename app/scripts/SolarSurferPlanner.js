@@ -173,7 +173,7 @@ Planner.prototype.calculatePowerAvailable = function(data, previous) {
 Planner.prototype.calculateSea = function(data, previous) {
   // calculate a historic or random sea current from the JPL OSCAR database
   data.sea_current = {
-    mag: new Qty('0.1 m/s').mul(this.config.sea_mult.scalar),
+    mag: new Qty('0.05 m/s').mul(this.config.sea_mult.scalar),
     dir: new Qty('-130 deg') // to the South
   };
 };

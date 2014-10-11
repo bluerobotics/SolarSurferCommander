@@ -338,6 +338,16 @@ controllers.controller('TelemetryCtrl', ['$scope', 'LiveTelemetry',
     });
   }]);
 
+controllers.controller('CommandCtrl', ['$scope', '$http',
+  function ($scope, $http) {
+    $http.get('/formats.json').
+    success(function(data, status, headers, config) {
+      // configure Message formats
+      window.Message.configure(data);
+      $scope.formats = window.Message.formats;
+    });
+  }]);
+
 controllers.controller('NominalCtrl', ['$scope', '$rootScope', '$timeout',
   function ($scope, $rootScope, $timeout) {
     // SolarSurfer mission planner

@@ -48,7 +48,7 @@ app.config(['$routeProvider', '$httpProvider', '$locationProvider',
     });
     $routeProvider.when('/commanding', {
         templateUrl: 'templates/commanding.html',
-        controller: 'StaticCtrl',
+        controller: 'CommandCtrl',
         reloadOnSearch: false
     });
     $routeProvider.when('/settings', {

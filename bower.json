@@ -23,7 +23,8 @@
     "highcharts-ng": "~0.0.6",
     "highcharts": "~3.0.7",
     "angular-moment": "~0.8.0",
-    "angularjs-geolocation": "~0.1.1"
+    "angularjs-geolocation": "~0.1.1",
+    "SolarSurferMessage": "https://github.com/bluerobotics/SolarSurferMessage.git#master"
   },
   "overrides": {
     "bootstrap": {

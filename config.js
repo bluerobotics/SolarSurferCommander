@@ -33,9 +33,12 @@ exports.config = {
         before: ['app/scripts/app.js']
       }
     }
-  // },
+  },
   // Enable or disable minifying of result js / css files.
-  // plugins: {
-  //   minify: true
+  plugins: {
+    // minify: true
+    afterBrunch: [
+      'cp bower_components/SolarSurferMessage/src/formats.json _public/'
+    ]
   }
 };

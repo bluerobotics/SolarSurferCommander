@@ -17,11 +17,18 @@ Planner.prototype.default_config = {
   date_max: moment().add(moment.duration(6, 'months')),
   // Monterey route:
   route: [
-    [33.963010 , -118.496475],
-    [33.788279 , -120.289307],
-    [34.270836 , -121.794434],
-    [35.728677 , -123.079834],
-    [36.562600 , -122.036133],
+    [33.9522, -118.5272],
+    [33.9480, -118.5300],
+    [33.9520, -118.5350],
+    [33.9480, -118.5400],
+    [33.9032, -118.8526],
+    [33.8500, -118.9000],
+    [33.8091, -120.3620],
+    [34.3000, -120.9567],
+    [34.3259, -121.5200],
+    [36.1000, -122.7400],
+    [36.5380, -122.1000],
+    [36.5583, -121.9300],
   ],
   // Hawaii route:
   // loc_start: new google.maps.LatLng(33.8823163, -118.4123013),
@@ -150,7 +157,7 @@ Planner.prototype.calculateRouteIndex = function(data, previous) {
 Planner.prototype.calculateSolar = function(data, previous) {
   // calculate the power output
   // TODO: actually use sun angle at the time of the year
-  var h = data.date.hours()+7;
+  var h = data.date.hours()+data.date.minutes()/60+7;
   var sunrise = 7;
   var transit = 11.5;
   var sun_factor;

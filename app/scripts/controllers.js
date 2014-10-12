@@ -23,7 +23,7 @@ controllers.controller('LayoutCtrl', ['$scope', '$location', 'LiveTelemetry', 'L
     // respond to LiveTelemetry updates
     $scope.$on('telemetry-update', function(event, items) {
       if(items.length > 0)
-        angular.extend($scope.last_update, items[0]);
+        angular.extend($scope.last_update, items[items.length - 1]);
     });
   }]);
 
@@ -326,16 +326,10 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
 
 controllers.controller('TelemetryCtrl', ['$scope', 'LiveTelemetry',
   function ($scope, LiveTelemetry) {
-    // initial data
-    $scope.data = {};
-    var items = LiveTelemetry.items();
-    if(items.length > 0)
-      angular.extend($scope.data, items[items.length-1]);
-
     // respond to LiveTelemetry updates
+    $scope.telemetry = LiveTelemetry.items();
     $scope.$on('telemetry-update', function(event, items) {
-      if(items.length > 0)
-        angular.extend($scope.data, items[items.length-1]);
+      $scope.telemetry = $scope.telemetry.concat(items);
     });
   }]);
 
@@ -366,7 +360,7 @@ controllers.controller('CommandCtrl', ['$scope', '$http', 'LiveCommand', 'Settin
       $scope.formats = window.Message.formats;
 
       // temporary hack to save clicks
-      $scope.type = '4';
+      // $scope.type = '4';
     });
 
     // init message when a new message type is selected

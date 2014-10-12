@@ -5,9 +5,9 @@
       Send Message: 
       <select ng-model="type" class="form-control" ng-options="index as format.name for (index, format) in formats"></select>
     </div>
-    <div class="panel-body">
+    <div class="panel-body" ng-if="type !== undefined">
 
-      <form class="form-horizontal" role="form" ng-if="type !== undefined">
+      <form class="form-horizontal" role="form">
         <div class="form-group" ng-repeat="field in formats[type].payload" ng-if="field.name != '_checksum'">
           <label class="col-sm-3 control-label">
             <button type="button" class="btn pull-left" ng-if="field.ignore !== undefined" ng-class="{'btn-default': message[field.name] != field.ignore, 'btn-danger': message[field.name] === field.ignore}" ng-click="message[field.name] = field.ignore"><span class="glyphicon glyphicon-remove-circle"></span></button>
@@ -73,7 +73,7 @@
         <span class="pull-right">{{command._ip}}</span>
         <pre ng-if="!collapsed">{{command | json}}</pre>
       </div>
-      <div ng-if="command.length">
+      <div ng-if="!commands.length">
         <p>No command history...</p>
       </div>
     </div>

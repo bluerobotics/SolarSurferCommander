@@ -5,8 +5,8 @@
 // define the module
 var services = angular.module('app.services', []);
 
-services.factory('Settings', ['$rootScope', '$q', '$cookies', 'Mission',
-  function($rootScope, $q, $cookies, Mission) {
+services.factory('Settings', ['$rootScope', '$q', '$cookies', 'Telemetry',
+  function($rootScope, $q, $cookies, Telemetry) {
     var deferred = $q.defer();
 
     var settings = {
@@ -20,12 +20,12 @@ services.factory('Settings', ['$rootScope', '$q', '$cookies', 'Mission',
     if(settings.mission !== undefined) deferred.resolve(settings);
     else {
       // this is the first visit, let's automatically grab the latest mission
-      Mission.query({
+      Telemetry.query({
         limit: 1,
         sort: '-_date'
       }).$promise.then(function(data){
-        console.log('Initializing app with latest mission', data.items[0]._id);
-        settings.mission = data.items[0]._id;
+        console.log('Initializing app with latest mission', data.items[0].mission);
+        settings.mission = data.items[0].mission;
       });
     }
 

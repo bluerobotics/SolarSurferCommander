@@ -179,7 +179,7 @@ services.factory('LiveTelemetry', ['$rootScope', '$interval', 'Settings', 'Telem
           calculate_derived_data(data.items, items);
 
           // add new items to the stack and notify listeners
-          items = data.items.concat(items);
+          items = items.concat(data.items);
           console.log('Telemetry update:', data.items.length, 'new items');
           $rootScope.$broadcast('telemetry-update', data.items);
         }
@@ -259,7 +259,7 @@ services.factory('LiveCommand', ['$rootScope', '$interval', 'Settings', 'Command
           data.items.reverse();
 
           // add new items to the stack and notify listeners
-          items = data.items.concat(items);
+          items = items.concat(data.items);
           console.log('Command update:', data.items.length, 'new items');
           $rootScope.$broadcast('command-update', data.items);
         }

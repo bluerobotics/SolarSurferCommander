@@ -9,12 +9,12 @@
 
       <form class="form-horizontal" role="form">
         <div class="form-group" ng-repeat="field in formats[type].payload" ng-if="field.name != '_checksum'">
-          <label class="col-sm-3 control-label">
+          <label class="col-md-4 control-label">
             <button type="button" class="btn pull-left" ng-if="field.ignore !== undefined" ng-class="{'btn-default': message[field.name] != field.ignore, 'btn-danger': message[field.name] === field.ignore}" ng-click="message[field.name] = field.ignore"><span class="glyphicon glyphicon-remove-circle"></span></button>
             {{field.name}}
           </label>
 
-          <div class="col-sm-9" ng-if="field.type != 'enum' && field.type != 'bitmap'">
+          <div class="col-md-8" ng-if="field.type != 'enum' && field.type != 'bitmap'">
             <div class="input-group">
               <input type="text" class="form-control" ng-model="message[field.name]" encoding="field.type">
               <span class="input-group-addon">{{field.conversion.decoded_units}}</span>
@@ -22,7 +22,7 @@
             <span class="help-block">{{field.comment}}</span>
           </div>
 
-          <div class="col-sm-9" ng-if="field.type == 'enum'">
+          <div class="col-md-8" ng-if="field.type == 'enum'">
             <div class="input-group">
               <select class="form-control" ng-options="value as value for (key, value) in field.enum" ng-model="message[field.name]"></select>
               <span class="input-group-addon">{{field.conversion.decoded_units}}</span>
@@ -30,7 +30,7 @@
             <span class="help-block">{{field.comment}}</span>
           </div>
 
-          <div class="col-sm-9" ng-if="field.type == 'bitmap'">
+          <div class="col-md-8" ng-if="field.type == 'bitmap'">
             <ul>
               <li ng-repeat="(key, value) in message[field.name]">
                 {{key}}:
@@ -42,17 +42,17 @@
         </div>
 
         <div class="form-group">
-          <label class="col-sm-3 control-label">
+          <label class="col-md-4 control-label">
             Preview
           </label>
 
-          <div class="col-sm-9">
+          <div class="col-md-8">
             <pre>{{message | json}}</pre>
           </div>
         </div>
 
         <div class="form-group">
-          <div class="col-sm-offset-3 col-sm-9">
+          <div class="col-md-offset-4 col-md-8">
             <button type="submit" class="btn" ng-click="sendCommand()" ng-class="{'btn-primary': !message.$status, 'btn-success': message.$status == 200, 'btn-danger': message.$status >= 300}">Push to {{mission.name}} mission</button>
 
             <pre class="alert alert-danger" ng-if="message.$errors">{{message.$errors | json}}</pre>
@@ -65,9 +65,12 @@
   </div>
 
   <div class="panel panel-default">
-    <div class="panel-heading">Command History</div>
+    <div class="panel-heading">
+      Command History
+      <span class="pull-right">showing the last few messages</span>
+    </div>
     <div class="panel-body">
-      <div ng-repeat="command in commands | orderBy:'-_date'">
+      <div ng-repeat="command in commands | orderBy:'-_date' | limitTo: 10">
         {{command._date}}
         <span class="label collapse-button" ng-init="collapsed=!$first&&true" ng-class="{'label-default': collapsed, 'label-primary': !collapsed}" ng-click="collapsed=!collapsed">...</span>
         <span class="pull-right">{{command._ip}}</span>

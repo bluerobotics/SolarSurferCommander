@@ -1,7 +1,10 @@
 <div class="panel panel-default page-telemetry">
-  <div class="panel-heading">Telemetry History</div>
+  <div class="panel-heading">
+    Telemetry History
+    <span class="pull-right">showing the last few messages</span>
+  </div>
   <div class="panel-body">
-    <div ng-repeat="item in telemetry | orderBy:'-_date'">
+    <div ng-repeat="item in telemetry | orderBy:'-_date' | limitTo: 10">
       {{item._date}}
       <span class="label collapse-button" ng-init="collapsed=!$first&&true" ng-class="{'label-default': collapsed, 'label-primary': !collapsed}" ng-click="collapsed=!collapsed">...</span>
       <span class="pull-right">{{item._ip}}</span>

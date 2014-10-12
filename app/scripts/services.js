@@ -217,4 +217,83 @@ services.factory('LiveTelemetry', ['$rootScope', '$interval', 'Settings', 'Telem
   }
 ]);
 
+services.factory('Command', ['$resource',
+  function($resource) {
+    return $resource(
+      'http://data.bluerobotics.com/command/:id',
+      {id:'@id'},
+      {
+        'query': {
+          method: 'GET'
+        },
+        'create': {
+          method: 'POST'
+        }
+      }
+    );
+  }
+]);
+
+services.factory('LiveCommand', ['$rootScope', '$interval', 'Settings', 'Command',
+  function($rootScope, $interval, Settings, Command) {
+    // state vars
+    var items = [];
+
+    // update function
+    var update = function(mission) {
+      var params = {
+        sort: '-_date',
+        limit: 1000,
+        where: { mission: mission }
+      };
+      if(items.length > 0)
+        params.where._date = { $gt: items[items.length - 1]._date };
+
+      // stupid angular removes $gt, so stringify it ahead of time
+      params.where = JSON.stringify(params.where);
+
+      Command.query(params, function(data){
+        if(data.items.length > 0) {
+          // reverse query sorting for calculating derived data
+          data.items.reverse();
+
+          // add new items to the stack and notify listeners
+          items = data.items.concat(items);
+          console.log('Command update:', data.items.length, 'new items');
+          $rootScope.$broadcast('command-update', data.items);
+        }
+      });
+    };
+
+    // public functions
+    var promise;
+    return {
+      init: function(){
+        $rootScope.$watch(function(){
+          return Settings.mission;
+        }, function(mission){
+          if(mission !== undefined) {
+            // settings have changed, re-initialize
+            $rootScope.$broadcast('command-init', []);
+            if(promise) $interval.cancel(promise);
+            items = []; // must always be sorted from news to oldest
+
+            // create initial request
+            console.log('Initiating live command polling for', mission);
+            update(mission);
+
+            // periodically poll for updates
+            promise = $interval(function(){
+              update(mission);
+            }, Settings.pollrate);
+          }
+        });
+      },
+      items: function(){
+        return items;
+      }
+    };
+  }
+]);
+
 })(window, window.angular);

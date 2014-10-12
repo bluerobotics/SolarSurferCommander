@@ -12,7 +12,7 @@
           <div class="col-sm-10">
             <select class="form-control" ng-model="settings.mission" ng-options="mission._id as mission.name for mission in missions.items">
             </select>
-            <p class="help-block">Telemetry from this mission is shown through the app.</p>
+            <p class="help-block">Telemetry from this mission is shown throughout the app.</p>
           </div>
         </div>
         <div class="form-group">
@@ -65,7 +65,7 @@
                   <td><input type="text" class="form-control" placeholder="Name" ng-model="mission.name"></td>
                   <td>{{mission._date}}</td>
                   <td><input type="radio" ng-model="vehicle.current_mission" ng-value="mission._id"></td>
-                  <td><button class="btn btn-primary" ng-click="saveMission(mission)">Save</button></td>
+                  <td><button class="btn" ng-click="saveMission(mission)" ng-class="{'btn-primary': !mission.$status, 'btn-success': mission.$status == 200, 'btn-danger': mission.$status >= 300}">Save</button></td>
                 </tr>
               </tbody>
             </table>
@@ -75,7 +75,7 @@
         </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
-            <button class="btn btn-primary" ng-click="saveVehicle(vehicle)">Save Vehicle</button>
+            <button class="btn btn-primary" ng-click="saveVehicle(vehicle)" ng-class="{'btn-primary': !vehicle.$status, 'btn-success': vehicle.$status == 200, 'btn-danger': vehicle.$status >= 300}">Save Vehicle</button>
           </div>
         </div>
       </form>

@@ -13,6 +13,48 @@ directives.directive('appVersion', ['version',
         };
     }]);
 
+directives.directive('encoding', function(){
+    if (typeof String.prototype.startsWith != 'function') {
+        // see below for better implementation!
+        String.prototype.startsWith = function (str){
+            return this.indexOf(str) === 0;
+        };
+    }
+
+    var parsePartialFloat = function(viewValue) {
+        if(viewValue == '-' || viewValue == '.' || viewValue == '-.') return viewValue;
+        else return parseFloat(viewValue);
+    };
+
+    return {
+        require: 'ngModel',
+        scope: {
+            encoding: '='
+        },
+        link: function(scope, ele, attr, ctrl){
+            ctrl.$parsers.unshift(function(viewValue){
+                if(scope.encoding.startsWith('int') || scope.encoding.startsWith('uint')) {
+                    // unsigned int
+                    if(viewValue == '-') return viewValue;
+                    else return parseInt(viewValue);
+                }
+                else if(scope.encoding == 'float' || scope.encoding == 'double') {
+                    if(Array.isArray(viewValue)) {
+                        // this is being used with ng-list
+                        for(var i = 0; i < viewValue.length; i++) 
+                            viewValue[i] = parsePartialFloat(viewValue[i]);
+                        return viewValue;
+                    }
+                    else {
+                        // single value
+                        return parsePartialFloat(viewValue);
+                    }
+                }
+            });
+        }
+    };
+});
+
 directives.directive('resultSet', ['$timeout',
     function($timeout) {
         return {

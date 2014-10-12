@@ -4,14 +4,15 @@
 
 var controllers = angular.module('app.controllers', []);
 
-controllers.controller('LayoutCtrl', ['$scope', '$location', 'LiveTelemetry',
-  function ($scope, $location, LiveTelemetry) {
+controllers.controller('LayoutCtrl', ['$scope', '$location', 'LiveTelemetry', 'LiveCommand',
+  function ($scope, $location, LiveTelemetry, LiveCommand) {
     $scope.isActive = function (navBarPath) {
       return navBarPath === $location.path().split('/')[1];
     };
 
     // init the LiveTelemetry process for the app
     LiveTelemetry.init();
+    LiveCommand.init();
 
     // initial data
     $scope.last_update = {};
@@ -338,14 +339,73 @@ controllers.controller('TelemetryCtrl', ['$scope', 'LiveTelemetry',
     });
   }]);
 
-controllers.controller('CommandCtrl', ['$scope', '$http',
-  function ($scope, $http) {
+controllers.controller('CommandCtrl', ['$scope', '$http', 'LiveCommand', 'Settings', 'Command', 'Mission',
+  function ($scope, $http, LiveCommand, Settings, Command, Mission) {
+    // respond to LiveCommand updates
+    $scope.commands = LiveCommand.items();
+    $scope.$on('command-update', function(event, items) {
+      $scope.commands = $scope.commands.concat(items);
+    });
+
+    // load current mission
+    $scope.$watch(function(){
+      return Settings.mission;
+    }, function(mission){
+      $scope.mission = Mission.query({
+        id: mission,
+        limit: 1
+      });
+    });
+
+    // prepare Message library
+    $scope.type = undefined;
     $http.get('/formats.json').
     success(function(data, status, headers, config) {
       // configure Message formats
       window.Message.configure(data);
       $scope.formats = window.Message.formats;
+
+      // temporary hack to save clicks
+      $scope.type = '4';
     });
+
+    // init message when a new message type is selected
+    $scope.$watch('type', function(type){
+      // init message
+      $scope.message = {};
+      if($scope.formats) {
+        angular.forEach($scope.formats[type].payload, function(field){
+          if(field.type == 'bitmap') {
+            $scope.message[field.name] = {};
+            angular.forEach(field.bitmap, function(value, key){
+              $scope.message[field.name][value] = false;
+            });
+          }
+          else $scope.message[field.name] = field.ignore !== undefined ? field.ignore : '';
+        });
+      }
+
+      // known defaults
+      $scope.message._version = window.Message.version;
+      $scope.message._format = type;
+    });
+
+    // send command
+    $scope.sendCommand = function() {
+      Command.create({token: Settings.token}, {
+        mission: Settings.mission,
+        data: $scope.message
+      }).$promise.then(
+          function(){
+            $scope.message.$status = 200;
+            $scope.message.$errors = undefined;
+          },
+          function(response){
+            $scope.message.$status = response.status;
+            $scope.message.$errors = response.data.errors;
+          }
+        );
+    };
   }]);
 
 controllers.controller('NominalCtrl', ['$scope', '$rootScope', '$timeout',
@@ -541,15 +601,36 @@ controllers.controller('SettingsCtrl', ['$scope', '$rootScope', 'Vehicle', 'Miss
     $scope.saveMission = function(m) {
       if(m._id === undefined) {
         // must be new, let's POST
-        m.$create({token: Settings.token});
+        m.$create({token: Settings.token}).$promise.then(
+          function(){
+            m.$status = 200;
+          },
+          function(response){
+            m.$status = response.status;
+          }
+        );
       }
       else {
         // must be old, let's PUT
-        Mission.update({id: m._id, token: Settings.token}, m);
+        Mission.update({id: m._id, token: Settings.token}, m).$promise.then(
+          function(){
+            m.$status = 200;
+          },
+          function(response){
+            m.$status = response.status;
+          }
+        );
       }
     };
     $scope.saveVehicle = function(v) {
-      Vehicle.update({id: v._id, token: Settings.token}, v);
+      Vehicle.update({id: v._id, token: Settings.token}, v).$promise.then(
+          function(){
+            v.$status = 200;
+          },
+          function(response){
+            v.$status = response.status;
+          }
+        );
     };
   }]);
 

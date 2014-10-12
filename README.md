@@ -40,10 +40,9 @@ npm run-script upload
 
 This project uses [semantic versioning](http://semver.org/).
 
-### v0.2.4 - future
+### v0.2.4 - 2014/10/11
 
 * Can now command through the GUI
-* Relocated shared components to SolarSurferAngularComponents
 
 ### v0.2.3 - 2014/10/09
 
@@ -82,6 +81,7 @@ This project uses [semantic versioning](http://semver.org/).
 
 ## Todo
 
+* TODO: Relocated shared components to SolarSurferAngularComponents
 * marker pop-up with date, gps coords, speed, current waypoint #
 * build-your-own graphs / plots
 * overlay planned waypoints by parsing command messages

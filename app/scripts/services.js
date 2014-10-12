@@ -255,6 +255,7 @@ services.factory('LiveCommand', ['$rootScope', '$interval', 'Settings', 'Command
       Command.query(params, function(data){
         if(data.items.length > 0) {
           // reverse query sorting for calculating derived data
+          // newest to oldest from api, went oldest to newest here
           data.items.reverse();
 
           // add new items to the stack and notify listeners

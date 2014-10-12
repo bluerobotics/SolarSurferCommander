@@ -16,7 +16,7 @@
 
           <div class="col-sm-9" ng-if="field.type != 'enum' && field.type != 'bitmap'">
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="" ng-model="message[field.name]" encoding="field.type">
+              <input type="text" class="form-control" ng-model="message[field.name]" encoding="field.type">
               <span class="input-group-addon">{{field.conversion.decoded_units}}</span>
             </div>
             <span class="help-block">{{field.comment}}</span>
@@ -24,7 +24,7 @@
 
           <div class="col-sm-9" ng-if="field.type == 'enum'">
             <div class="input-group">
-              <select class="form-control" ng-options="key as value for (key, value) in field.enum" ng-model="message[field.name]"></select>
+              <select class="form-control" ng-options="value as value for (key, value) in field.enum" ng-model="message[field.name]"></select>
               <span class="input-group-addon">{{field.conversion.decoded_units}}</span>
             </div>
             <span class="help-block">{{field.comment}}</span>
@@ -67,7 +67,7 @@
   <div class="panel panel-default">
     <div class="panel-heading">Command History</div>
     <div class="panel-body">
-      <div ng-repeat="command in commands">
+      <div ng-repeat="command in commands | orderBy:'-_date'">
         {{command._date}}
         <span class="label collapse-button" ng-init="collapsed=!$first&&true" ng-class="{'label-default': collapsed, 'label-primary': !collapsed}" ng-click="collapsed=!collapsed">...</span>
         <span class="pull-right">{{command._ip}}</span>

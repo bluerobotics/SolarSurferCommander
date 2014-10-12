@@ -134,9 +134,11 @@ services.factory('LiveTelemetry', ['$rootScope', '$interval', 'Settings', 'Telem
     };
     var calculate_derived_data = function(new_items, old_items) {
       for(var i = 0; i < new_items.length; i++) {
-        var derived = {
-          time: new Date(new_items[i]._date).getTime() - timezone_offset
-        };
+        var derived = {};
+        if(new_items[i].data._version >= 2)
+          derived.time = new_items[i].data.time * 1000; // milliseconds
+        else // fall back to API received time
+          derived.time = new Date(new_items[i]._date).getTime() - timezone_offset;
         new_items[i].derived = derived;
 
         if(i === 0) {
@@ -155,7 +157,10 @@ services.factory('LiveTelemetry', ['$rootScope', '$interval', 'Settings', 'Telem
           derived.dt = calculate_dt(new_items[i], new_items[i-1]);
         }
         derived.v = derived.dx / derived.dt;
-        if(derived.v > 1) derived.v = undefined;
+
+        // temporary hack because of back time syncing (_version <= 1)
+        if(new_items[i].data._version < 2 && derived.v > 1)
+          derived.v = undefined;
       }
     };
 

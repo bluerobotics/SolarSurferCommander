@@ -61,7 +61,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="mission in missions.items" ng-if="mission.vehicle == vehicle._id">
+                <tr ng-repeat="mission in missions.items | orderBy:'name'" ng-if="mission.vehicle == vehicle._id">
                   <td><input type="text" class="form-control" placeholder="Name" ng-model="mission.name"></td>
                   <td>{{mission._date}}</td>
                   <td><input type="radio" ng-model="vehicle.current_mission" ng-value="mission._id"></td>

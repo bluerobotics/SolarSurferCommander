@@ -40,9 +40,10 @@ npm run-script upload
 
 This project uses [semantic versioning](http://semver.org/).
 
-### v0.2.4 - 2014/10/11
+### v0.2.4 - 2014/10/future
 
 * Can now command through the GUI
+* Utilize new GPS time to clean up derived data (tlm >= version 2)
 
 ### v0.2.3 - 2014/10/09
 

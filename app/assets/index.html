@@ -59,8 +59,8 @@
                         </li>
                         <li ng-class="{active:isActive('settings')}" class="visible-xs-block"><a href="/settings">Settings</a></li>
                     </ul>
-
-                    <span class="label label-success pull-right hidden-xs last-updated"><span class="glyphicon glyphicon-time"></span> <span am-time-ago="last_update._date"></span></span>
+                    <tlm-status class="pull-right hidden-xs"></tlm-status>
+                    <!-- <span class="label label-primary last-updated"><span class="glyphicon glyphicon-time"></span> <span am-time-ago="last_update._date"></span></span> -->
 
                 </div>
             </div>
@@ -74,13 +74,13 @@
 
         <div id="footer">
             <div class="container text-muted">
-                <span class="pull-right">© 2014 BlueRobotics</span>
+                <span class="pull-right">© 2014 <a href="http://bluerobotics.com/" target="_blank" class="text-muted">BlueRobotics</a></span>
                 <span class="hidden-xs" ng-cloak>
                     <a href="https://github.com/bluerobotics/SolarSurferCommander" target="_blank" class="text-muted">v<span app-version></span></a>
                     |
                     <a href="/settings"><span class="glyphicon glyphicon-cog"></span></a>
                 </span>
-                <span class="label label-success visible-xs-inline last-updated" ng-cloak><span class="glyphicon glyphicon-globe"></span> <span am-time-ago="last_update._date"></span></span>
+                <tlm-status class="visible-xs-inline"></tlm-status>
         </div>
 
         <!-- Placed at the end of the document so the pages load faster -->

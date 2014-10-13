@@ -1,7 +1,13 @@
 {
-  "name": "SolarSurferPlanner",
+  "name": "SolarSurferCommander",
   "version": "0.2.4",
-  "private": true,
+  "main": [
+    "app/assets/img/BlueRobotics-SolarSurfer-Logo.png",
+    "app/assets/img/favicon.png",
+    "app/assets/img/apple-touch-icon.png",
+    "app/components/tlm-status/tlm-status.js",
+    "app/components/tlm-status/tlm-status.less"
+  ],
   "ignore": [
     "**/.*",
     "node_modules"
@@ -24,7 +30,7 @@
     "highcharts": "~3.0.7",
     "angular-moment": "~0.8.0",
     "angularjs-geolocation": "~0.1.1",
-    "SolarSurferMessage": "https://github.com/bluerobotics/SolarSurferMessage.git#master"
+    "SolarSurferMessage": "https://github.com/bluerobotics/SolarSurferMessage.git#v0.2.0"
   },
   "overrides": {
     "bootstrap": {

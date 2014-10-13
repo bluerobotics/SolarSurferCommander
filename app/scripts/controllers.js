@@ -13,18 +13,6 @@ controllers.controller('LayoutCtrl', ['$scope', '$location', 'LiveTelemetry', 'L
     // init the LiveTelemetry process for the app
     LiveTelemetry.init();
     LiveCommand.init();
-
-    // initial data
-    $scope.last_update = {};
-    var items = LiveTelemetry.items();
-    if(items.length > 0)
-      angular.extend($scope.last_update, items[0]);
-
-    // respond to LiveTelemetry updates
-    $scope.$on('telemetry-update', function(event, items) {
-      if(items.length > 0)
-        angular.extend($scope.last_update, items[items.length - 1]);
-    });
   }]);
 
 controllers.controller('MapCtrl', ['$scope', '$interval', 'LiveTelemetry', 'geolocation',
@@ -86,7 +74,7 @@ controllers.controller('MapCtrl', ['$scope', '$interval', 'LiveTelemetry', 'geol
       },
       icons: [{
         icon: {
-          path: google.maps.SymbolPath.BACKWARD_OPEN_ARROW
+          path: google.maps.SymbolPath.FORWARD_OPEN_ARROW
         },
         offset: '25px',
         repeat: '50px'
@@ -595,7 +583,7 @@ controllers.controller('SettingsCtrl', ['$scope', '$rootScope', 'Vehicle', 'Miss
     $scope.saveMission = function(m) {
       if(m._id === undefined) {
         // must be new, let's POST
-        m.$create({token: Settings.token}).$promise.then(
+        m.$create({token: Settings.token}).then(
           function(){
             m.$status = 200;
           },

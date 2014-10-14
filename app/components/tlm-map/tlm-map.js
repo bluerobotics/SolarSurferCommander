@@ -30,7 +30,7 @@ module.directive('tlmMap', ['$interval', 'LiveTelemetry', 'geolocation',
             scaleControl: false,
             streetViewControl: false,
             overviewMapControl: false,
-            scrollWheel: false
+            scrollwheel: false
           }
         };
         $scope.surfer_marker = {

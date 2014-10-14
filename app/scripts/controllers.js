@@ -216,7 +216,6 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
         // nav chart
         $scope.nav_chart.series[0].data.push([time, items[i].data.currentWaypointIndex]);
         $scope.nav_chart.series[1].data.push([time, items[i].data.heading]);
-        console.log('data is', items[i].derived.waypointHeading)
         if(items[i].derived.waypointHeading !== undefined) {
           $scope.nav_chart.series[2].data.push([time, items[i].derived.waypointHeading]);
           $scope.nav_chart.series[3].data.push([time, items[i].derived.waypointDistance]);

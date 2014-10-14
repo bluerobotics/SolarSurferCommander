@@ -135,13 +135,23 @@ module.factory('LiveTelemetry', ['$rootScope', '$interval', 'Settings', 'Telemet
     };
     var calculate_derived_data = function(new_items, old_items) {
       for(var i = 0; i < new_items.length; i++) {
-        var derived = {};
+        var derived = {
+          time: undefined,
+          dx: undefined,
+          dt: undefined,
+          v: undefined,
+          waypointHeading: undefined,
+          waypointDistance: undefined,
+        };
+        new_items[i].derived = derived;
+
+        // calculate time
         if(new_items[i].data._version >= 2)
           derived.time = new_items[i].data.time * 1000; // milliseconds
         else // fall back to API received time
           derived.time = new Date(new_items[i]._date).getTime() - timezone_offset;
-        new_items[i].derived = derived;
 
+        // calculate dx, dt, and v
         if(i === 0) {
           if(old_items.length > 0) {
             derived.dx = calculate_dx(new_items[i], old_items[old_items.length-1]);
@@ -162,6 +172,16 @@ module.factory('LiveTelemetry', ['$rootScope', '$interval', 'Settings', 'Telemet
         // temporary hack because of back time syncing (_version <= 1)
         if(new_items[i].data._version < 2 && derived.v > 1)
           derived.v = undefined;
+
+        // calculate waypointHeading and waypointDistance
+        if(new_items[i].data.currentWaypointLatitude !== undefined) {
+          var from = {lat: new_items[i].data.latitude, lng: new_items[i].data.longitude};
+          var to = {lat: new_items[i].data.currentWaypointLatitude, lng: new_items[i].data.currentWaypointLongitude};
+          derived.waypointDistance =  getDistance(from, to); // m
+          derived.waypointHeading = google.maps.geometry.spherical.computeHeading(
+            new google.maps.LatLng(from.lat, from.lng),
+            new google.maps.LatLng(to.lat, to.lng));
+        }
       }
     };
 

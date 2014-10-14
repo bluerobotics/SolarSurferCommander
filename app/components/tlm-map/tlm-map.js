@@ -117,7 +117,7 @@ module.directive('tlmMap', ['$interval', 'LiveTelemetry', 'geolocation',
               icon: '/img/black-marker.png'
             });
           }
-          $scope.actual_path.path = new_paths.concat($scope.actual_path.path);
+          $scope.actual_path.path = $scope.actual_path.path.concat(new_paths);
 
           // process current marker position
           if(items.length > 0) {

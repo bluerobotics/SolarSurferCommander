@@ -13,6 +13,17 @@ directives.directive('appVersion', ['version',
         };
     }]);
 
+directives.directive('hideFromPublic', ['$location',
+    function($location) {
+        return {
+            restrict: 'A',
+            link: function(scope, element, attrs) {
+                if($location.host() == 'surfer.bluerobotics.com')
+                    element.addClass('hide-from-public');
+            }
+        };
+    }]);
+
 directives.directive('encoding', function(){
     if(typeof String.prototype.startsWith != 'function') {
         // see below for better implementation!

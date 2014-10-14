@@ -7,7 +7,8 @@
     "postinstall": "node_modules/bower/bin/bower install --config.interactive=false",
     "start": "node_modules/brunch/bin/brunch watch --server --port 4444",
     "build": "rm -rf _public; node_modules/brunch/bin/brunch build",
-    "upload": "ssh commander.bluerobotics.com 'rm -rf ~/commander.bluerobotics.com/*'; scp -r _public/. commander.bluerobotics.com:~/commander.bluerobotics.com"
+    "upload": "ssh commander.bluerobotics.com 'rm -rf ~/commander.bluerobotics.com/*'; scp -r _public/. commander.bluerobotics.com:~/commander.bluerobotics.com",
+    "surfer": "ssh surfer.bluerobotics.com 'rm -rf ~/surfer.bluerobotics.com/*'; scp -r _public/. surfer.bluerobotics.com:~/surfer.bluerobotics.com"
   },
   "repository": {
     "type": "git",

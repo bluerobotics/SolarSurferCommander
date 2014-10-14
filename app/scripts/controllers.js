@@ -126,6 +126,15 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
           }
         },
         opposite: true
+      },{
+        gridLineWidth: 0,
+        title: {
+          text: 'Distance (m)',
+          style: {
+            color: Highcharts.getOptions().colors[2]
+          }
+        },
+        opposite: true
       }],
       series: [{
         name: 'Waypoint Index',
@@ -136,6 +145,20 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
       },{
         yAxis: 1,
         name: 'Heading (degrees)',
+        marker: {
+          enabled: true
+        },
+        data: []
+      },{
+        yAxis: 1,
+        name: 'Heading to waypoint (degrees)',
+        marker: {
+          enabled: true
+        },
+        data: []
+      },{
+        yAxis: 2,
+        name: 'Distance to waypoint (m)',
         marker: {
           enabled: true
         },
@@ -193,6 +216,11 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
         // nav chart
         $scope.nav_chart.series[0].data.push([time, items[i].data.currentWaypointIndex]);
         $scope.nav_chart.series[1].data.push([time, items[i].data.heading]);
+        console.log('data is', items[i].derived.waypointHeading)
+        if(items[i].derived.waypointHeading !== undefined) {
+          $scope.nav_chart.series[2].data.push([time, items[i].derived.waypointHeading]);
+          $scope.nav_chart.series[3].data.push([time, items[i].derived.waypointDistance]);
+        }
 
         // telem chart
         $scope.telem_chart.series[0].data.push([time, items[i].data.telemetryCount]);

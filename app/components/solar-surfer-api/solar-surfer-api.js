@@ -3,9 +3,10 @@
 'use strict';
 
 // define the module
-var services = angular.module('app.services', []);
+var module = angular.module('solarSurferApi', ['ngCookies', 'ngResource']);
+var api_root = 'http://data.bluerobotics.com';
 
-services.factory('Settings', ['$rootScope', '$q', '$cookies', 'Telemetry',
+module.factory('Settings', ['$rootScope', '$q', '$cookies', 'Telemetry',
   function($rootScope, $q, $cookies, Telemetry) {
     var deferred = $q.defer();
 
@@ -42,10 +43,10 @@ services.factory('Settings', ['$rootScope', '$q', '$cookies', 'Telemetry',
   }
 ]);
 
-services.factory('Vehicle', ['$resource',
+module.factory('Vehicle', ['$resource',
   function($resource) {
     return $resource(
-      'http://data.bluerobotics.com/vehicle/:id',
+      api_root + '/vehicle/:id',
       {id:'@id'},
       {
         'query': {
@@ -62,10 +63,10 @@ services.factory('Vehicle', ['$resource',
   }
 ]);
 
-services.factory('Mission', ['$resource',
+module.factory('Mission', ['$resource',
   function($resource) {
     return $resource(
-      'http://data.bluerobotics.com/mission/:id',
+      api_root + '/mission/:id',
       {id:'@id'},
       {
         'query': {
@@ -82,10 +83,10 @@ services.factory('Mission', ['$resource',
   }
 ]);
 
-services.factory('Telemetry', ['$resource',
+module.factory('Telemetry', ['$resource',
   function($resource) {
     return $resource(
-      'http://data.bluerobotics.com/telemetry/:id',
+      api_root + '/telemetry/:id',
       {id:'@id'},
       {
         'query': {
@@ -96,7 +97,7 @@ services.factory('Telemetry', ['$resource',
   }
 ]);
 
-services.factory('LiveTelemetry', ['$rootScope', '$interval', 'Settings', 'Telemetry',
+module.factory('LiveTelemetry', ['$rootScope', '$interval', 'Settings', 'Telemetry',
   function($rootScope, $interval, Settings, Telemetry) {
     // state vars
     var items = [];
@@ -222,10 +223,10 @@ services.factory('LiveTelemetry', ['$rootScope', '$interval', 'Settings', 'Telem
   }
 ]);
 
-services.factory('Command', ['$resource',
+module.factory('Command', ['$resource',
   function($resource) {
     return $resource(
-      'http://data.bluerobotics.com/command/:id',
+      api_root + '/command/:id',
       {id:'@id'},
       {
         'query': {
@@ -239,7 +240,7 @@ services.factory('Command', ['$resource',
   }
 ]);
 
-services.factory('LiveCommand', ['$rootScope', '$interval', 'Settings', 'Command',
+module.factory('LiveCommand', ['$rootScope', '$interval', 'Settings', 'Command',
   function($rootScope, $interval, Settings, Command) {
     // state vars
     var items = [];

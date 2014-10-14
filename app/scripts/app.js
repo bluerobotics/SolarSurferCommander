@@ -16,10 +16,10 @@ var app = angular.module('app', [
     'geolocation',
     // app modules
     'app.filters',
-    'app.services',
     'app.directives',
     'app.controllers',
     // components
+    'solarSurferApi',
     'tlmStatus',
 ]);
 

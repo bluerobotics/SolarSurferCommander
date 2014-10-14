@@ -6,7 +6,8 @@
     "app/assets/img/favicon.png",
     "app/assets/img/apple-touch-icon.png",
     "app/components/tlm-status/tlm-status.js",
-    "app/components/tlm-status/tlm-status.less"
+    "app/components/tlm-status/tlm-status.less",
+    "app/components/solar-surfer-api/solar-surfer-api.js"
   ],
   "ignore": [
     "**/.*",

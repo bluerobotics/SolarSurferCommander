@@ -11,7 +11,7 @@ module.factory('Settings', ['$rootScope', '$q', '$cookies', 'Telemetry',
     var deferred = $q.defer();
 
     var settings = {
-      mission: $cookies.mission,
+      mission: undefined, //$cookies.mission,
       pollrate: $cookies.pollrate || 10000,
       token: $cookies.token,
       init_complete: deferred.promise

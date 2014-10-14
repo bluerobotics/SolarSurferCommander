@@ -1,7 +1,7 @@
 (function(window, angular, undefined) {
 'use strict';
 
-var module = angular.module('tlmStatus', []);
+var module = angular.module('tlmStatus', ['solarSurferApi', 'angularMoment']);
 
 module.directive('tlmStatus', ['LiveTelemetry',
   function(LiveTelemetry) {

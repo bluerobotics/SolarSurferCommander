@@ -5,9 +5,15 @@
     "app/assets/img/BlueRobotics-SolarSurfer-Logo.png",
     "app/assets/img/favicon.png",
     "app/assets/img/apple-touch-icon.png",
+    "app/components/solar-surfer-api/solar-surfer-api.js",
     "app/components/tlm-status/tlm-status.js",
     "app/components/tlm-status/tlm-status.less",
-    "app/components/solar-surfer-api/solar-surfer-api.js"
+    "app/components/tlm-map/tlm-map.js",
+    "app/components/tlm-map/assets/img/black-marker.png",
+    "app/components/tlm-map/assets/img/blue-marker.png",
+    "app/components/tlm-map/assets/img/green-marker.png",
+    "app/components/tlm-map/assets/img/pink-marker.png",
+    "app/components/tlm-map/assets/img/surfboard-marker.png"
   ],
   "ignore": [
     "**/.*",

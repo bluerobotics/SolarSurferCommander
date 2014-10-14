@@ -6,14 +6,9 @@
 var app = angular.module('app', [
     // angular modules
     'ngRoute',
-    'ngCookies',
-    'ngResource',
     // third-party modules
     'ui.bootstrap',
-    'google-maps',
     'highcharts-ng',
-    'angularMoment',
-    'geolocation',
     // app modules
     'app.filters',
     'app.directives',
@@ -21,6 +16,7 @@ var app = angular.module('app', [
     // components
     'solarSurferApi',
     'tlmStatus',
+    'tlmMap',
 ]);
 
 app.value('version', '0.2.4');
@@ -33,7 +29,7 @@ app.config(['$routeProvider', '$httpProvider', '$locationProvider',
     // routes
     $routeProvider.when('/map', {
         templateUrl: 'templates/map.html',
-        controller: 'MapCtrl',
+        controller: 'StaticCtrl',
         reloadOnSearch: false
     });
     $routeProvider.when('/graph', {

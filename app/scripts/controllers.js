@@ -540,9 +540,10 @@ controllers.controller('SettingsCtrl', ['$scope', '$rootScope', 'Vehicle', 'Miss
     };
   }]);
 
-controllers.controller('StaticCtrl', ['$scope', '$rootScope',
-  function ($scope, $rootScope) {
+controllers.controller('StaticCtrl', ['$scope', '$location',
+  function ($scope, $location) {
     // a generic static content controller
+    $scope.userMarker = ($location.host() != 'surfer.bluerobotics.com');
   }]);
 
 })(window, window.angular, window.SolarSuferPlanner);

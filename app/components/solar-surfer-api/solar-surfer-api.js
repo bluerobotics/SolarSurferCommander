@@ -140,14 +140,16 @@ module.factory('LiveTelemetry', ['$rootScope', '$interval', 'Settings', 'Telemet
           dx: undefined,
           dt: undefined,
           v: undefined,
+          p_thrusters: undefined,
           waypointHeading: undefined,
           waypointDistance: undefined,
+          headingError: undefined,
         };
         new_items[i].derived = derived;
 
         // calculate time
         if(new_items[i].data._version >= 2)
-          derived.time = new_items[i].data.time * 1000; // milliseconds
+          derived.time = new_items[i].data.time * 1000 - timezone_offset; // milliseconds
         else // fall back to API received time
           derived.time = new Date(new_items[i]._date).getTime() - timezone_offset;
 
@@ -173,6 +175,9 @@ module.factory('LiveTelemetry', ['$rootScope', '$interval', 'Settings', 'Telemet
         if(new_items[i].data._version < 2 && derived.v > 1)
           derived.v = undefined;
 
+        // p_thrusters
+        derived.p_thrusters = new_items[i].data.p_left + new_items[i].data.p_right;
+
         // calculate waypointHeading and waypointDistance
         if(new_items[i].data.currentWaypointLatitude !== undefined) {
           var from = {lat: new_items[i].data.latitude, lng: new_items[i].data.longitude};
@@ -181,6 +186,10 @@ module.factory('LiveTelemetry', ['$rootScope', '$interval', 'Settings', 'Telemet
           derived.waypointHeading = google.maps.geometry.spherical.computeHeading(
             new google.maps.LatLng(from.lat, from.lng),
             new google.maps.LatLng(to.lat, to.lng));
+
+          // heading error
+          var a = new_items[i].data.heading, b = derived.waypointHeading;
+          derived.headingError = Math.min(Math.abs(b-a), Math.abs(360-b+a),Math.abs(360-a+b));
         }
       }
     };

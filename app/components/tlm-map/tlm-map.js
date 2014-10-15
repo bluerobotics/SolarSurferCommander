@@ -17,10 +17,7 @@ module.directive('tlmMap', ['$interval', 'LiveTelemetry', 'geolocation',
       controller: function($scope, $element){
         // map config
         $scope.map = {
-          center: {
-            latitude: 33.87,
-            longitude: -118.36
-          },
+          center: undefined,
           zoom: 13,
           options: {
             panControl: false,
@@ -33,22 +30,9 @@ module.directive('tlmMap', ['$interval', 'LiveTelemetry', 'geolocation',
             scrollwheel: false
           }
         };
-        $scope.surfer_marker = {
-          id: 'surfer',
-          icon: '/img/blue-marker.png',
-          coords: {},
-          options: { draggable: false },
-          events: {
-            // dragend: function (marker, eventName, args) {
-            //   $log.log('marker dragend');
-            //   $log.log(marker.getPosition().lat());
-            //   $log.log(marker.getPosition().lng());
-            // }
-          }
-        };
         $scope.waypoint_marker = {
           id: 'waypoint',
-          icon: '/img/pink-marker.png',
+          icon: '/img/purple-marker.png',
           coords: {},
           options: { draggable: false },
         };
@@ -57,7 +41,7 @@ module.directive('tlmMap', ['$interval', 'LiveTelemetry', 'geolocation',
         if($scope.tlmMapUserMarker) {
           $scope.user_marker = {
             id: 'user',
-            icon: '/img/green-marker.png',
+            icon: '/img/cyan-marker.png',
             coords: {},
             options: {},
             events: {}
@@ -88,47 +72,33 @@ module.directive('tlmMap', ['$interval', 'LiveTelemetry', 'geolocation',
           }]
         };
 
-        // initial data
-        var items = LiveTelemetry.items();
-
-        // process line and marker positions
-        for(var i = 0; i < items.length; i++) {
-          $scope.actual_path.path.push({
-            id: items[i]._id,
-            latitude: items[i].data.latitude,
-            longitude: items[i].data.longitude,
-            icon: '/img/black-marker.png',
-            options: {
-              title: items[i]._date
-            }
-          });
-        }
-
-        // process current marker position
-        if(items.length > 0)
-          $scope.surfer_marker.coords = $scope.actual_path.path[0];
-
-        // respond to LiveTelemetry updates
-        $scope.$on('telemetry-update', function(event, items) {
-          // process line and marker positions
-          var new_paths = [];
-          for(var i = 0; i < items.length; i++) {
-            new_paths.push({
-              id: items[i]._id,
-              latitude: items[i].data.latitude,
-              longitude: items[i].data.longitude,
-              icon: '/img/black-marker.png',
-              options: {
-                title: items[i]._date
-              }
-            });
-          }
-          $scope.actual_path.path = $scope.actual_path.path.concat(new_paths);
-
-          // process current marker position
+        // process path markers
+        var update_data = function(items) {
           if(items.length > 0) {
-            angular.extend($scope.surfer_marker.coords, new_paths[new_paths.length - 1]);
+            var new_paths = [];
+            for(var i = 0; i < items.length; i++) {
+              new_paths.push({
+                id: items[i]._id,
+                latitude: items[i].data.latitude,
+                longitude: items[i].data.longitude,
+                icon: '/img/black-marker.png',
+                options: {
+                  title: items[i]._date
+                }
+              });
+            }
 
+            // change actual_path
+            if($scope.map.center === undefined) {
+              $scope.map.center = new_paths[0];
+              new_paths[0].icon = '/img/green-marker.png';
+            }
+            if($scope.actual_path.path.length  > 0)
+              $scope.actual_path.path[$scope.actual_path.path.length - 1].icon = '/img/black-marker.png';
+            $scope.actual_path.path = $scope.actual_path.path.concat(new_paths);
+            $scope.actual_path.path[$scope.actual_path.path.length - 1].icon = '/img/red-marker.png';
+
+            // update waypoint marker
             var lastItem = items[items.length - 1];
             if(lastItem.data._version >= 2) {
               $scope.waypoint_marker.coords = {
@@ -136,8 +106,15 @@ module.directive('tlmMap', ['$interval', 'LiveTelemetry', 'geolocation',
                 longitude: lastItem.data.currentWaypointLongitude
               };
             }
-              //  
           }
+        };
+
+        // initial LiveTelemetry
+        update_data(LiveTelemetry.items());
+
+        // respond to LiveTelemetry updates
+        $scope.$on('telemetry-update', function(event, items) {
+          update_data(items);
         });
       },
       template:
@@ -146,7 +123,6 @@ module.directive('tlmMap', ['$interval', 'LiveTelemetry', 'geolocation',
             '<polyline path="actual_path.path" stroke="actual_path.stroke" icons="actual_path.icons"></polyline>' +
             '<markers models="actual_path.path" coords="\'self\'" fit="true" icon="\'icon\'" options="\'options\'">' +
             '</markers>' +
-            '<marker coords="surfer_marker.coords" options="surfer_marker.options" icon="surfer_marker.icon" events="surfer_marker.events" idkey="marker.id"></marker>' +
             '<marker coords="waypoint_marker.coords" options="waypoint_marker.options" icon="waypoint_marker.icon" idkey="waypoint_marker.id"></marker>' +
             '<marker coords="user_marker.coords" options="user_marker.options" icon="user_marker.icon" idkey="user_marker.id" ng-if="tlmMapUserMarker"></marker>' +
           '</google-map>' +

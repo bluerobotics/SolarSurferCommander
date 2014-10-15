@@ -62,6 +62,14 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
           }
         }
       },{
+      //   gridLineWidth: 0,
+      //   title: {
+      //     text: 'Power (W)',
+      //     style: {
+      //       color: Highcharts.getOptions().colors[1]
+      //     }
+      //   }
+      // },{
         gridLineWidth: 0,
         title: {
           text: 'Voltage (V)',
@@ -93,6 +101,12 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
         },
         data: []
       },{
+      //   name: 'Thruster Power (W)',
+      //   marker: {
+      //     enabled: true
+      //   },
+      //   data: []
+      // },{
         yAxis: 1,
         name: 'Load Voltage (V)',
         marker: {
@@ -132,12 +146,21 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
       },{
         gridLineWidth: 0,
         title: {
-          text: 'Distance (m)',
+          text: 'Waypoint heading (degrees)',
           style: {
             color: Highcharts.getOptions().colors[2]
           }
         },
         opposite: true
+      },{
+        gridLineWidth: 0,
+        title: {
+          text: 'Distance (m)',
+          style: {
+            color: Highcharts.getOptions().colors[3]
+          }
+        },
+        opposite: false
       }],
       series: [{
         name: 'Waypoint Index',
@@ -153,14 +176,14 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
         },
         data: []
       },{
-        yAxis: 1,
-        name: 'Heading to waypoint (degrees)',
+        yAxis: 2,
+        name: 'Heading (degrees)',
         marker: {
           enabled: true
         },
         data: []
       },{
-        yAxis: 2,
+        yAxis: 3,
         name: 'Distance to waypoint (m)',
         marker: {
           enabled: true
@@ -213,6 +236,7 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
         // power chart
         // $scope.power_chart.series[0].data.push([time, items[i].data.p_solar]);
         $scope.power_chart.series[0].data.push([time, items[i].data.p_load]);
+        // $scope.power_chart.series[1].data.push([time, items[i].derived.p_thrusters]);
         $scope.power_chart.series[1].data.push([time, items[i].data.v_load]);
         $scope.power_chart.series[2].data.push([time, items[i].derived.v]);
 

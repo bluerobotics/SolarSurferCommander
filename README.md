@@ -44,6 +44,7 @@ This project uses [semantic versioning](http://semver.org/).
 
 * Can now command through the GUI
 * Utilize new GPS time to clean up derived data (tlm >= version 2)
+* Lots of bug fixes
 
 ### v0.2.3 - 2014/10/09
 
@@ -90,7 +91,6 @@ This project uses [semantic versioning](http://semver.org/).
   * create this as a separate repository for browser and node
 * auto select a position on the map when click a point in a graph
 * Use HTML5 localstorage to speed up subsequent data access
-* fix SolarSurfer path bug - connects seemingly random points together
 * brunch doesn't copy .htaccess to _public
 
 ## Screenshot

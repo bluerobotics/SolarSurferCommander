@@ -3,8 +3,8 @@
 
 var module = angular.module('tlmMap', ['solarSurferApi', 'google-maps', 'geolocation']);
 
-module.directive('tlmMap', ['$interval', 'LiveTelemetry', 'geolocation',
-  function($interval, LiveTelemetry, geolocation) {
+module.directive('tlmMap', ['$interval', 'LiveTelemetry', 'geolocation', '$timeout',
+  function($interval, LiveTelemetry, geolocation, $timeout) {
     return {
       restrict: 'E',
       transclude: false,
@@ -90,7 +90,10 @@ module.directive('tlmMap', ['$interval', 'LiveTelemetry', 'geolocation',
 
             // change actual_path
             if($scope.map.center === undefined) {
-              $scope.map.center = new_paths[0];
+              $scope.map.center = {
+                latitude: new_paths[0].latitude,
+                longitude: new_paths[0].longitude
+              };
               new_paths[0].icon = '/img/green-marker.png';
             }
             if($scope.actual_path.path.length  > 0)
@@ -121,7 +124,7 @@ module.directive('tlmMap', ['$interval', 'LiveTelemetry', 'geolocation',
         '<div class="tlm-map">' +
           '<google-map center="map.center" zoom="map.zoom" options="map.options" draggable="true" events="map.events" ng-if="actual_path.path.length > 0">' +
             '<polyline path="actual_path.path" stroke="actual_path.stroke" icons="actual_path.icons"></polyline>' +
-            '<markers models="actual_path.path" coords="\'self\'" fit="true" icon="\'icon\'" options="\'options\'">' +
+            '<markers models="actual_path.path" coords="\'self\'" icon="\'icon\'" options="\'options\'">' +
             '</markers>' +
             '<marker coords="waypoint_marker.coords" options="waypoint_marker.options" icon="waypoint_marker.icon" idkey="waypoint_marker.id"></marker>' +
             '<marker coords="user_marker.coords" options="user_marker.options" icon="user_marker.icon" idkey="user_marker.id" ng-if="tlmMapUserMarker"></marker>' +

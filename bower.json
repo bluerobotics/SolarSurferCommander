@@ -10,9 +10,11 @@
     "app/components/tlm-status/tlm-status.less",
     "app/components/tlm-map/tlm-map.js",
     "app/components/tlm-map/assets/img/black-marker.png",
-    "app/components/tlm-map/assets/img/blue-marker.png",
+    "app/components/tlm-map/assets/img/cyan-marker.png",
     "app/components/tlm-map/assets/img/green-marker.png",
     "app/components/tlm-map/assets/img/pink-marker.png",
+    "app/components/tlm-map/assets/img/purple-marker.png",
+    "app/components/tlm-map/assets/img/red-marker.png",
     "app/components/tlm-map/assets/img/surfboard-marker.png"
   ],
   "ignore": [

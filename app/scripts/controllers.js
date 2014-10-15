@@ -10,7 +10,6 @@ controllers.controller('LayoutCtrl', ['$scope', '$rootScope', '$location', 'Live
       return navBarPath === $location.path().split('/')[1];
     };
     $rootScope.$on('$routeChangeStart', function(){
-      console.log('close!')
       $scope.navCollapsed = true;
     });
 

@@ -192,6 +192,162 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
       }]
     });
 
+    // thruster chart
+    $scope.thruster_chart = angular.copy(chart_defaults);
+    angular.extend($scope.thruster_chart, {
+      yAxis: [{
+        gridLineWidth: 0,
+        title: {
+          text: 'Power (W)',
+          style: {
+            color: Highcharts.getOptions().colors[0]
+          }
+        }
+      },{
+        gridLineWidth: 0,
+        title: {
+          text: 'Speed (rpm)',
+          style: {
+            color: Highcharts.getOptions().colors[1]
+          }
+        }
+      },{
+        gridLineWidth: 0,
+        title: {
+          text: 'Status (1=good, 0=bad)',
+          style: {
+            color: Highcharts.getOptions().colors[2]
+          }
+        },
+        opposite: true
+      }],
+      series: [{
+        name: 'Left Thruster (W)',
+        marker: {
+          enabled: true
+        },
+        data: []
+      },{
+        name: 'Right Thruster (W)',
+        marker: {
+          enabled: true
+        },
+        data: []
+      },{
+        yAxis: 1,
+        name: 'Left Thruster (rpm)',
+        marker: {
+          enabled: true
+        },
+        data: []
+      },{
+        yAxis: 1,
+        name: 'Right Thruster (rpm)',
+        marker: {
+          enabled: true
+        },
+        data: []
+      },{
+        yAxis: 2,
+        name: 'Left Thruster',
+        marker: {
+          enabled: true
+        },
+        data: []
+      },{
+        yAxis: 2,
+        name: 'Right Thruster',
+        marker: {
+          enabled: true
+        },
+        data: []
+      }]
+    });
+
+    // status chart
+    $scope.status_chart = angular.copy(chart_defaults);
+    angular.extend($scope.status_chart, {
+      yAxis: [{
+        gridLineWidth: 0,
+        title: {
+          text: 'Status (1=good, 0=bad)',
+          style: {
+            color: Highcharts.getOptions().colors[2]
+          }
+        }
+      }],
+      series: [{
+        name: 'GPS',
+        marker: {
+          enabled: true
+        },
+        data: []
+      },{
+        name: 'IMU',
+        marker: {
+          enabled: true
+        },
+        data: []
+      },{
+        name: 'Compass',
+        marker: {
+          enabled: true
+        },
+        data: []
+      },{
+        name: 'BLDC Monitor',
+        marker: {
+          enabled: true
+        },
+        data: []
+      },{
+        name: 'Satcom',
+        marker: {
+          enabled: true
+        },
+        data: []
+      },{
+        name: 'RC Radio',
+        marker: {
+          enabled: true
+        },
+        data: []
+      },{
+        name: 'Nav box dry',
+        marker: {
+          enabled: true
+        },
+        data: []
+      },{
+        name: 'Battery box dry',
+        marker: {
+          enabled: true
+        },
+        data: []
+      }]
+    });
+
+    // environment chart
+    $scope.environment_chart = angular.copy(chart_defaults);
+    angular.extend($scope.environment_chart, {
+      yAxis: [{
+        gridLineWidth: 0,
+        title: {
+          text: 'Temperature (°C)',
+          style: {
+            color: Highcharts.getOptions().colors[2]
+          }
+        }
+      }],
+      series: [{
+        name: 'Water temp (°C)',
+        marker: {
+          enabled: true
+        },
+        data: []
+      }]
+    });
+
     // telem chart
     $scope.telem_chart = angular.copy(chart_defaults);
     angular.extend($scope.telem_chart, {
@@ -247,6 +403,27 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
           $scope.nav_chart.series[2].data.push([time, items[i].derived.waypointHeading]);
           $scope.nav_chart.series[3].data.push([time, items[i].derived.waypointDistance]);
         }
+
+        // thruster chart
+        $scope.thruster_chart.series[0].data.push([time, items[i].data.p_left]);
+        $scope.thruster_chart.series[1].data.push([time, items[i].data.p_right]);
+        $scope.thruster_chart.series[2].data.push([time, items[i].data.rpm_left]);
+        $scope.thruster_chart.series[3].data.push([time, items[i].data.rpm_right]);
+        $scope.thruster_chart.series[4].data.push([time, items[i].data.status2['Left Thruster Okay']?1:0]);
+        $scope.thruster_chart.series[5].data.push([time, items[i].data.status2['Right Thruster Okay']?1:0]);
+
+        // status chart
+        $scope.status_chart.series[0].data.push([time, items[i].data.status1['GPS Okay']?1:0]);
+        $scope.status_chart.series[1].data.push([time, items[i].data.status1['IMU Okay']?1:0]);
+        $scope.status_chart.series[2].data.push([time, items[i].data.status1['Compass Okay']?1:0]);
+        $scope.status_chart.series[3].data.push([time, items[i].data.status1['BLDC Monitor Okay']?1:0]);
+        $scope.status_chart.series[4].data.push([time, items[i].data.status1['Satcom Okay']?1:0]);
+        $scope.status_chart.series[5].data.push([time, items[i].data.status1['RC Radio Okay']?1:0]);
+        $scope.status_chart.series[6].data.push([time, items[i].data.status2['Navigation Box Dry']?1:0]);
+        $scope.status_chart.series[7].data.push([time, items[i].data.status2['Battery Box Dry']?1:0]);
+
+        // environment chart
+        $scope.environment_chart.series[0].data.push([time, items[i].data.tempWater]);
 
         // telem chart
         $scope.telem_chart.series[0].data.push([time, items[i].data.telemetryCount]);

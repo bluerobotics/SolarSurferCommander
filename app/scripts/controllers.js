@@ -4,11 +4,15 @@
 
 var controllers = angular.module('app.controllers', []);
 
-controllers.controller('LayoutCtrl', ['$scope', '$location', 'LiveTelemetry', 'LiveCommand',
-  function ($scope, $location, LiveTelemetry, LiveCommand) {
+controllers.controller('LayoutCtrl', ['$scope', '$rootScope', '$location', 'LiveTelemetry', 'LiveCommand',
+  function ($scope, $rootScope, $location, LiveTelemetry, LiveCommand) {
     $scope.isActive = function (navBarPath) {
       return navBarPath === $location.path().split('/')[1];
     };
+    $rootScope.$on('$routeChangeStart', function(){
+      console.log('close!')
+      $scope.navCollapsed = true;
+    });
 
     // init the LiveTelemetry process for the app
     LiveTelemetry.init();

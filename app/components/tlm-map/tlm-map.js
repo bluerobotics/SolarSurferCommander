@@ -35,7 +35,7 @@ module.directive('tlmMap', ['$interval', 'LiveTelemetry', 'geolocation',
         };
         $scope.surfer_marker = {
           id: 'surfer',
-          icon: '/img/green-marker.png',
+          icon: '/img/blue-marker.png',
           coords: {},
           options: { draggable: false },
           events: {
@@ -57,7 +57,7 @@ module.directive('tlmMap', ['$interval', 'LiveTelemetry', 'geolocation',
         if($scope.tlmMapUserMarker) {
           $scope.user_marker = {
             id: 'user',
-            icon: '/img/blue-marker.png',
+            icon: '/img/green-marker.png',
             coords: {},
             options: {},
             events: {}
@@ -97,7 +97,10 @@ module.directive('tlmMap', ['$interval', 'LiveTelemetry', 'geolocation',
             id: items[i]._id,
             latitude: items[i].data.latitude,
             longitude: items[i].data.longitude,
-            icon: '/img/black-marker.png'
+            icon: '/img/black-marker.png',
+            options: {
+              title: items[i]._date
+            }
           });
         }
 
@@ -114,14 +117,17 @@ module.directive('tlmMap', ['$interval', 'LiveTelemetry', 'geolocation',
               id: items[i]._id,
               latitude: items[i].data.latitude,
               longitude: items[i].data.longitude,
-              icon: '/img/black-marker.png'
+              icon: '/img/black-marker.png',
+              options: {
+                title: items[i]._date
+              }
             });
           }
           $scope.actual_path.path = $scope.actual_path.path.concat(new_paths);
 
           // process current marker position
           if(items.length > 0) {
-            angular.extend($scope.surfer_marker.coords, $scope.actual_path.path[0]);
+            angular.extend($scope.surfer_marker.coords, new_paths[new_paths.length - 1]);
 
             var lastItem = items[items.length - 1];
             if(lastItem.data._version >= 2) {
@@ -138,7 +144,7 @@ module.directive('tlmMap', ['$interval', 'LiveTelemetry', 'geolocation',
         '<div class="tlm-map">' +
           '<google-map center="map.center" zoom="map.zoom" options="map.options" draggable="true" events="map.events" ng-if="actual_path.path.length > 0">' +
             '<polyline path="actual_path.path" stroke="actual_path.stroke" icons="actual_path.icons"></polyline>' +
-            '<markers models="actual_path.path" coords="\'self\'" fit="true" icon="\'icon\'">' +
+            '<markers models="actual_path.path" coords="\'self\'" fit="true" icon="\'icon\'" options="\'options\'">' +
             '</markers>' +
             '<marker coords="surfer_marker.coords" options="surfer_marker.options" icon="surfer_marker.icon" events="surfer_marker.events" idkey="marker.id"></marker>' +
             '<marker coords="waypoint_marker.coords" options="waypoint_marker.options" icon="waypoint_marker.icon" idkey="waypoint_marker.id"></marker>' +

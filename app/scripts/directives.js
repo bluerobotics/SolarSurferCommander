@@ -44,12 +44,7 @@ directives.directive('encoding', function(){
         },
         link: function(scope, ele, attr, ctrl){
             ctrl.$parsers.unshift(function(viewValue){
-                if(scope.encoding.startsWith('int') || scope.encoding.startsWith('uint')) {
-                    // unsigned int
-                    if(viewValue == '-') return viewValue;
-                    else return parseInt(viewValue);
-                }
-                else if(scope.encoding == 'float' || scope.encoding == 'double') {
+                if(scope.encoding.startsWith('int') || scope.encoding.startsWith('uint') || scope.encoding == 'float' || scope.encoding == 'double') {
                     if(Array.isArray(viewValue)) {
                         // this is being used with ng-list
                         for(var i = 0; i < viewValue.length; i++) 

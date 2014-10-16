@@ -18,7 +18,7 @@ module.directive('tlmMap', ['$interval', 'LiveTelemetry', 'geolocation', '$timeo
         // map config
         $scope.map = {
           center: undefined,
-          zoom: 13,
+          zoom: 11,
           options: {
             panControl: false,
             zoomControl: true,
@@ -81,7 +81,7 @@ module.directive('tlmMap', ['$interval', 'LiveTelemetry', 'geolocation', '$timeo
                 id: items[i]._id,
                 latitude: items[i].data.latitude,
                 longitude: items[i].data.longitude,
-                icon: '/img/black-marker.png',
+                icon: (items[i].data.rpm_left+items[i].data.rpm_right > 0) ? '/img/green-marker-small.png' : '/img/black-marker-small.png',
                 options: {
                   title: items[i]._date
                 }
@@ -91,8 +91,8 @@ module.directive('tlmMap', ['$interval', 'LiveTelemetry', 'geolocation', '$timeo
             // change actual_path
             if($scope.map.center === undefined) {
               $scope.map.center = {
-                latitude: new_paths[0].latitude,
-                longitude: new_paths[0].longitude
+                latitude: new_paths[new_paths.length-1].latitude,
+                longitude: new_paths[new_paths.length-1].longitude
               };
               new_paths[0].icon = '/img/green-marker.png';
             }

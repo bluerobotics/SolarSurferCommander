@@ -82,6 +82,7 @@ module.directive('tlmMap', ['$interval', 'LiveTelemetry', 'geolocation', '$timeo
                 latitude: items[i].data.latitude,
                 longitude: items[i].data.longitude,
                 icon: (items[i].data.rpm_left+items[i].data.rpm_right > 0) ? '/img/green-marker-small.png' : '/img/black-marker-small.png',
+                icon_colored: (items[i].data.rpm_left+items[i].data.rpm_right > 0) ? '/img/green-marker-small.png' : '/img/black-marker-small.png',
                 options: {
                   title: items[i]._date
                 }
@@ -96,8 +97,10 @@ module.directive('tlmMap', ['$interval', 'LiveTelemetry', 'geolocation', '$timeo
               };
               new_paths[0].icon = '/img/green-marker.png';
             }
-            if($scope.actual_path.path.length  > 0)
-              $scope.actual_path.path[$scope.actual_path.path.length - 1].icon = '/img/black-marker.png';
+            if($scope.actual_path.path.length  > 0) {
+              var prev = $scope.actual_path.path[$scope.actual_path.path.length - 1];
+              prev.icon = prev.icon_colored;
+            }
             $scope.actual_path.path = $scope.actual_path.path.concat(new_paths);
             $scope.actual_path.path[$scope.actual_path.path.length - 1].icon = '/img/red-marker.png';
 

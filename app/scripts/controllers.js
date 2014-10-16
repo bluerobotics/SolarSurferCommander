@@ -137,7 +137,7 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
       },{
         gridLineWidth: 0,
         title: {
-          text: 'Heading (degrees)',
+          text: 'Heading (°)',
           style: {
             color: Highcharts.getOptions().colors[1]
           }
@@ -146,7 +146,7 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
       },{
         gridLineWidth: 0,
         title: {
-          text: 'Waypoint heading (degrees)',
+          text: 'Waypoint heading (°)',
           style: {
             color: Highcharts.getOptions().colors[2]
           }
@@ -170,14 +170,14 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
         data: []
       },{
         yAxis: 1,
-        name: 'Heading (degrees)',
+        name: 'Heading (°)',
         marker: {
           enabled: true
         },
         data: []
       },{
         yAxis: 2,
-        name: 'Heading (degrees)',
+        name: 'Waypoint heading (°)',
         marker: {
           enabled: true
         },
@@ -338,9 +338,25 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
             color: Highcharts.getOptions().colors[2]
           }
         }
+      },{
+        gridLineWidth: 0,
+        title: {
+          text: 'Instability (°)',
+          style: {
+            color: Highcharts.getOptions().colors[1]
+          }
+        },
+        opposite: true
       }],
       series: [{
         name: 'Water temp (°C)',
+        marker: {
+          enabled: true
+        },
+        data: []
+      },{
+        yAxis: 1,
+        name: 'Instability (°)',
         marker: {
           enabled: true
         },
@@ -424,6 +440,7 @@ controllers.controller('GraphCtrl', ['$scope', 'LiveTelemetry',
 
         // environment chart
         $scope.environment_chart.series[0].data.push([time, items[i].data.tempWater]);
+        $scope.environment_chart.series[1].data.push([time, items[i].data.rollPitchRange]);
 
         // telem chart
         $scope.telem_chart.series[0].data.push([time, items[i].data.telemetryCount]);

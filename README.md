@@ -2,6 +2,8 @@
 
 Navigation planner and command builder for the [SolarSurfer](http://bluerobotics.com/) project.
 
+![Screenshot](screenshots/screenshot-v0.2.1.png)
+
 ## Overview
 
 This script is used to estimate the total travel profile of the SolarSurfer. While written in JavaScript, this package isn't normally hosted anywhere, so you'll have to download and run it yourself to see it.
@@ -92,7 +94,3 @@ This project uses [semantic versioning](http://semver.org/).
 * auto select a position on the map when click a point in a graph
 * Use HTML5 localstorage to speed up subsequent data access
 * brunch doesn't copy .htaccess to _public
-
-## Screenshot
-
-![Screenshot](screenshots/screenshot-v0.2.1.png)
